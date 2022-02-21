@@ -31,6 +31,6 @@ Everything you need is a recipie file to give intructions about what you want to
 * variable declaratinos (TODO)
 * '$' use of environment variables
 
-#COnfig File:
+#**Config File:**
 * Bind compiler tools
 * create aliases
