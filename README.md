@@ -14,7 +14,7 @@ It is desing to be stratightfoward, user-friendy and cooperative.
 Everything you need is a recipie file to give intructions about what you want to do.
 
 #**Features:**
-* Add apth
+* Add path
 * Add file
 * Add extension
 * Ignore path
@@ -30,6 +30,7 @@ Everything you need is a recipie file to give intructions about what you want to
 * condiiotnal checks (TODO)
 * variable declaratinos (TODO)
 * '$' use of environment variables
+* pack builds, check dependencies and install packages
 
 #**Config File:**
 * Bind compiler tools
