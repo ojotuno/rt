@@ -1,0 +1,11 @@
+#lists of data
+ext2Add = []
+files2Add = []
+paths2Add = []
+files2ignore = []
+paths2ignore = []
+ext2ignore = []
+arguments = []
+root_dir = ""
+target_dir = ""
+target_file = ""
