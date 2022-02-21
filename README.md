@@ -11,3 +11,24 @@ It is desing to be stratightfoward, user-friendy and cooperative.
 **No many file to configure**
 
 ## How to use RT
+Everything you need is a recipie file to give intructions about what you want to do.
+
+* Features:
+Add apth
+Add file
+Add extension
+Ignore path
+Ignore extension
+root dir 
+target dir
+> Run console command
+invoke script with args and get those arguments by adding * (*arg1, *arg2)
+create file 
+write file
+read file (TODO)
+if and loops (TODO)
+variable declaratinos (TODO)
+$ use of environment variables
+
+CONFIG FILE:
+binding compiler tools
