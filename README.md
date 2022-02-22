@@ -22,9 +22,7 @@ Everything you need is a recipie file to give intructions about what you want to
 * root dir 
 * target dir
 * '>' Run console command
-* invoke script with args and get those arguments by adding * (*arg1, *arg2)
-* create file 
-* write file
+* invoke script with args and get those arguments by define them (args = ...)
 * OS check
 * read file (TODO)
 * condiiotnal checks (TODO)
@@ -36,12 +34,30 @@ Everything you need is a recipie file to give intructions about what you want to
 * Bind compiler tools
 * create aliases
 
-#**Instrcutionsto create a package**
+#**Instrcutions to create a package:**
+
 To create a package the order below must be followed: 
 
-1. root_dir => root_dir = path/env_var/env_var + path/*arg  (if path does not exist it tries to create it)
-2. target_dir => target_dir = path/env_var/env_var + path/*arg (if path does not exist it tries to create it)
-3. packing instructions => add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, 
-4. pack call => pack filename
+1. root_dir => `root_dir = path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)>
+2. target_dir => `target_dir = path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)>
+3. packing instructions => `add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, etc`
+4. pack call => `pack filename`
 
 NOTE: Between steps can be other instructions like create_file, or invoke a script
+
+###Exmaple:
+```
+args targetFile
+root_dir $ROOT_DIR
+target_dir targetFile
+> ./createVersionFile.sh
+add_file version.h
+ignore_ext cpp
+ignore_ext c
+ignore_ext o
+#ignore mp3 files only from ./res dir
+ignore_ext /res/ mp3
+#add config dir inside release folder
+add_path /tmp/config relase/config
+pack myversion.tar.gz
+```
