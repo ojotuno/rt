@@ -35,3 +35,10 @@ Everything you need is a recipie file to give intructions about what you want to
 #**Config File:**
 * Bind compiler tools
 * create aliases
+
+#**Instrcutionsto create a package**
+To create a package this order must be followed:
+1. root_dir
+2. target_dir
+3. packing instructions
+4. pack call
