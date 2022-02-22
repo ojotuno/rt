@@ -50,14 +50,19 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 args targetFile
 root_dir $ROOT_DIR
 target_dir targetFile
+
 > ./createVersionFile.sh
+
 add_file version.h
 ignore_ext cpp
 ignore_ext c
 ignore_ext o
+
 #ignore mp3 files only from ./res dir
 ignore_ext /res/ mp3
+
 #add config dir inside release folder
 add_path /tmp/config relase/config
+
 pack myversion.tar.gz
 ```
