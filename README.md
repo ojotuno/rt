@@ -41,10 +41,21 @@ Everything you need is a recipie file to give intructions about what you want to
 
 To create a package the order below must be followed: 
 
-1. root_dir => `root_dir = path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)>
-2. target_dir => `target_dir = path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)>
-3. packing instructions => `add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, etc`
-4. pack call => `pack filename`
+1. root_dir 
+
+ `root_dir = path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)
+
+2. target_dir 
+
+`target_dir = path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)
+
+3. packing instructions 
+ 
+`add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, etc`
+
+4. pack call 
+
+`pack _filename_`
 
 NOTE: Between steps can be other instructions like create_file, or invoke a script
 
