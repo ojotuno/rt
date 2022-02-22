@@ -97,7 +97,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 `arguments _arg1_ _arg2_ ...`
 
-> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error.
+> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
 
 #### Script Example:
 ```
