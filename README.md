@@ -43,11 +43,11 @@ To create a package the order below must be followed:
 
 1. root_dir 
 
- `root_dir = path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)
+ `root_dir path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)
 
 2. target_dir 
 
-`target_dir = path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)
+`target_dir path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)
 
 3. packing instructions 
  
@@ -94,6 +94,10 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `ignore_ext _extension_`
 
 > Ignores all the files with the *\_extension\_* extesion
+
+`arguments _arg1_ _arg2_ ...`
+
+> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error.
 
 #### Script Example:
 ```
