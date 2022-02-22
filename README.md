@@ -13,7 +13,7 @@ It is desing to be stratightfoward, user-friendy and cooperative.
 ## How to use RT
 Everything you need is a recipie file to give intructions about what you want to do.
 
-#**Features:**
+### Features:
 * Add path
 * Add file
 * Add extension
@@ -33,11 +33,11 @@ Everything you need is a recipie file to give intructions about what you want to
 * git and svn native support 
 * build your app
 
-#**Config File:**
+### Config File:
 * Bind compiler tools
 * create aliases
 
-#**Instrcutions to create a package:**
+### Instrcutions to create a package:
 
 To create a package the order below must be followed: 
 
@@ -48,7 +48,30 @@ To create a package the order below must be followed:
 
 NOTE: Between steps can be other instructions like create_file, or invoke a script
 
-###Exmaple:
+## Syntax
+`root_dir _path_` 
+ > Indicates the root directory (*\_path\_*) where start to walk:
+   
+`add_path _pathSrc _new_pckg_path_` 
+
+> Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*
+
+`add_path _path-to-add_`
+
+> Adds *_path-to-add_* and its contain inside the final tar.gz
+  
+`add_file file-to-add path-where-to-add`
+-> Adds the file 'file-to-add' inside the path 'path-where-to-add'
+- add_ext extension
+-> Add all the files with a certains extension inside the tar.gz
+- ignore_path path
+-> Ignore a certain path
+- ignore_file file-to-ignore
+-> Ignores a certain file
+- ignore_ext extension
+-> Ignores all the files with the indicated extesion
+
+#### Script Example:
 ```
 args targetFile
 root_dir $ROOT_DIR
