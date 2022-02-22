@@ -23,12 +23,13 @@ Everything you need is a recipie file to give intructions about what you want to
 * target dir
 * '>' Run console command
 * invoke script with args and get those arguments by define them (args = ...)
-* OS check
+* OS check (TODO: does not make sense if there is no conditionals)
 * read file (TODO)
 * condiiotnal checks (TODO)
 * variable declaratinos (TODO)
 * '$' use of environment variables
 * pack builds, check dependencies and install packages
+* print messages (print "msg")
 
 #**Config File:**
 * Bind compiler tools
