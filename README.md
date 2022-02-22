@@ -60,16 +60,29 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 > Adds *_path-to-add_* and its contain inside the final tar.gz
   
-`add_file file-to-add path-where-to-add`
--> Adds the file 'file-to-add' inside the path 'path-where-to-add'
-- add_ext extension
--> Add all the files with a certains extension inside the tar.gz
-- ignore_path path
--> Ignore a certain path
-- ignore_file file-to-ignore
--> Ignores a certain file
-- ignore_ext extension
--> Ignores all the files with the indicated extesion
+`add_file _file-to-add_ _path-where-to-add_`
+
+> Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*
+
+`add_file _file-to-add_`
+
+> Adds the file *\_file-to-add\_* inside the package preserving the path inside it.
+
+`add_ext _extension_`
+
+> Add all the files with the *\_extension\_* inside the package
+
+`ignore_path _path_`
+
+> Ignores the path *\_path\_* and its contains
+
+`ignore_file _file-to-ignore_`
+
+> Ignores the file *\_file-to-ignore\_*
+
+`ignore_ext _extension_`
+
+> Ignores all the files with the *\_extension\_* extesion
 
 #### Script Example:
 ```
