@@ -22,7 +22,7 @@ Everything you need is a recipie file to give intructions about what you want to
 * root dir 
 * target dir
 * '>' Run console command
-* invoke script with args and get those arguments by define them (args = ...)
+* Using of recepie arguments. Use those arguments by define them (args = ...)
 * OS check (TODO: does not make sense if there is no conditionals)
 * read file (TODO)
 * condiiotnal checks (TODO)
@@ -30,6 +30,8 @@ Everything you need is a recipie file to give intructions about what you want to
 * '$' use of environment variables
 * pack builds, check dependencies and install packages
 * print messages (print "msg")
+* git and svn native support 
+* build your app
 
 #**Config File:**
 * Bind compiler tools
@@ -66,4 +68,8 @@ ignore_ext /res/ mp3
 add_path /tmp/config relase/config
 
 pack myversion.tar.gz
+
+git add myversion.tar.gz
+git commit -m "uploaded new version"
+git push
 ```
