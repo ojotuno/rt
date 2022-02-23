@@ -17,6 +17,7 @@ Everything you need is a recipie file to give intructions about what you want to
 * Add path
 * Add file
 * Add extension
+* Add folder
 * Ignore path
 * Ignore extension
 * root dir 
@@ -65,7 +66,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
    
 `add_path _pathSrc _new_pckg_path_` 
 
-> Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*
+> Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
 
 `add_path _path-to-add_`
 
