@@ -101,7 +101,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 #### Script Example:
 ```
-args targetFile
+arguments targetFile
 root_dir $ROOT_DIR
 target_dir targetFile
 
