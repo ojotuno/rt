@@ -84,6 +84,14 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 > Ignores all the files with the *\_extension\_* extesion
 
+`pack _filename_`
+
+> Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.
+
+`print _str_`
+
+> Prints out the *\_str\_*
+
 #### Script Example:
 ```
 args targetFile
