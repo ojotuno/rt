@@ -1,24 +1,67 @@
-import colors
+import colors as color
 import os
+import globals as g
+import funcs as f
 
-# Constants (keywords)
-ADD_PATH = 'add_path'
-ADD_FILE = 'add_file'
-ADD_EXT = 'add_ext'
-IGNORE_PATH = 'ignore_path'
-IGNORE_FILE = 'ignore_file'
-IGNORE_EXT = 'ignore_ext'
-ROOT_DIR = "root_dir" #mandatory
-TARGET_DIR = "target_dir" #mandatory
-TARGET_FILE = "target_file" #mandatory
-PACK_TARGET_FILE = "pack" #mandatory (meanwhile install does not exist)
-INSTALL_TARGET_FILE = "install" # TODO
-CREATE_FILE = "create_file"
-WRITE_FILE = "write_file"
-RUN_CONSOLE_CMD = ">"
-SCRIPT_ARG = "*"
-COMMENT = '#'
+kw = g.Keywords()
 
+def parser_error(str):
+    print(color.darkred + "Syntax error: " + str + color.off);
+
+def parser_warning(str):
+    print(color.yellow + "Warning: " + str + color.off)
+
+def parse_add_path(tokens):
+    return ""
+
+def parse_add_file(tokens):
+    return ""
+
+def parse_add_ext(tokens):
+    return ""
+
+def parse_ignore_path(tokens):
+    return ""
+
+def parse_ignore_file(tokens):
+    return ""
+
+def parse_ignore_ext(tokens):
+    return ""
+    
+def parse_root_dir(tokens):
+    if len(tokens) == 2:
+        value = resolve_url(tokens[1]) # could be a path, a envvar, env var+paths, aliases and all can be mixted
+        f.set_root_dir(value) # root_dir value
+    else:
+        parser_error("root_dir only acepts one value");
+
+def parse_target_dir(tokens):
+    return ""
+
+def parse_pack(tokens):
+    return ""
+
+def parse_run_cmd(tokens):
+    return ""
+
+def parse_print(tokens):
+    return ""
+
+def parse_arguments(tokens):
+    return ""
+
+def parse_git(tokens):
+    return ""
+
+def parse_svn(tokens):
+    return ""
+
+def parse_aliases(tokens):
+    return ""
+
+def resolve_url(url):
+    return ""
 
 # TODO: change it to make only a syntaxic analisys
 def parseLine(line, lineNum):
@@ -28,15 +71,42 @@ def parseLine(line, lineNum):
     if nTokens == 0:
         pass
     else:
-        firstChar = tokens[0][0]
-        if firstChar == COMMENT:
+        if kw.comment == tokens[0][0]:
             pass
-        elif firstChar == RUN_CONSOLE_CMD:
-            # check console cmd
-        elif firstChar == SCRIPT_ARG:
-            #store script arg
-    
-def syntax_analysis(filename):
+        else :
+            keyword = tokens[0]
+            if keyword == kw.add_path:
+                parse_add_path(tokens)
+            elif keyword == kw.add_file:
+                parse_add_file(tokens)
+            elif keyword == kw.add_ext:
+                parse_add_ext(tokens)
+            elif keyword == kw.ignore_path:
+                parse_ignore_path(tokens)
+            elif keyword == kw.ignore_file:
+                parse_ignore_file(tokens)
+            elif keyword == kw.ignore_ext:
+                parse_ignore_ext(tokens)
+            elif keyword == kw.root_dir:
+                parse_root_dir(tokens)
+            elif keyword == kw.target_dir:
+                parse_target_dir(tokens)
+            elif keyword == kw.pack: 
+                parse_pack(tokens)
+            elif keyword == kw.run_cmd:
+                parse_run_cmd(tokens)
+            elif keyword == kw.print:
+                parse_print(tokens)
+            elif keyword == kw.arguments:
+                parse_arguments(tokens)
+            elif keyword == kw.git:
+                parse_git(tokens)
+            elif keyword == kw.svn:
+                parse_svn(tokens)
+            else:
+                parse_aliases(tokens)
+
+def parser(filename):
     if os.path.exists(filename) == True:
         file = open(filename)
         lineNum = 0
@@ -47,4 +117,4 @@ def syntax_analysis(filename):
 
         check_script_aguments()
     else:
-        print(colors.darkred + "ERROR: " + filename + " not found." + colors.off)
+        parser_error(filename + " not found.")
