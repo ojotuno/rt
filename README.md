@@ -41,19 +41,15 @@ Everything you need is a recipie file to give intructions about what you want to
 
 To create a package the order below must be followed: 
 
-1. root_dir 
-
- `root_dir path/env_var/env_var + path/*arg`  (if path does not exist it tries to create it)
-
-2. target_dir 
+1. target_dir 
 
 `target_dir path/env_var/env_var + path/*arg` (if path does not exist it tries to create it)
 
-3. packing instructions 
+2. packing instructions 
  
 `add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, etc`
 
-4. pack call 
+3. pack call 
 
 `pack _filename_`
 
@@ -61,8 +57,11 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 ## Syntax
 `root_dir _path_` 
- > Indicates the root directory (*\_path\_*) where start to walk:
-   
+ > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recepie. Instructions are related to this root
+ 
+`target_dir _path_` 
+ > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
+
 `add_path _pathSrc _new_pckg_path_ (and ignore_path | ignore_file | ignore_ext and ..)*` 
 
 > Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
@@ -106,6 +105,10 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `print _str_`
 
 > Prints out the *\_str\_*
+
+`_path_`
+
+ > This can be a path, an environment varriable or env_va and paths cocatenated by '/'.  e.g `$myenvvar/folder or $var1/$var2/folder` etc. If '/' is the last character in any environment variable, the duplicity it will be resolved atumatically.
 
 #### Script Example:
 ```
