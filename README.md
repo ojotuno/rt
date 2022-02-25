@@ -64,11 +64,11 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `root_dir _path_` 
  > Indicates the root directory (*\_path\_*) where start to walk:
    
-`add_path _pathSrc _new_pckg_path_` 
+`add_path _pathSrc _new_pckg_path_ (and ignore_path | ignore_file | ignore_ext and ..)*` 
 
 > Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
 
-`add_path _path-to-add_`
+`add_path _path-to-add_ (and ignore_path | ignore_file | ignore_ext and ..)*`
 
 > Adds *_path-to-add_* and its contain inside the final tar.gz
   
@@ -76,13 +76,13 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 > Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*
 
-`add_file _file-to-add_`
+`add_file _files-to-add_`
 
-> Adds the file *\_file-to-add\_* inside the package preserving the path inside it.
+> Adds the file *\_files-to-add\_* inside the package preserving the path inside it.
 
-`add_ext _extension_`
+`add_ext _extensions_ `
 
-> Add all the files with the *\_extension\_* inside the package
+> Add all the files with the *\_extensions\_* inside the package
 
 `ignore_path _path_`
 
