@@ -10,8 +10,19 @@ It is desing to be stratightfoward, user-friendy and cooperative.
 **No many options to remember**
 **No many file to configure**
 
-## How to use RT
+## Usage
 Everything you need is a recipie file to give intructions about what you want to do.
+
+### How to call rt
+
+`rt src dest*`
+
+> src: Can be a recepie file or a package file.
+> dest (optional): Where the package will be unpacked. If empty, will be unpacked in the current directory.
+
+### How to install a package
+
+When packing it has to be included a file named _install_ that will contain the recepie to install the recepie.
 
 ### Features:
 * Add path
