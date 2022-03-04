@@ -61,7 +61,18 @@ def parse_aliases(tokens):
     return ""
 
 def resolve_url(url):
-    return ""
+    if url[0] == "$":
+        arg = url.split("/")
+        solvedPath = ""
+        for token in arg:
+            if token[0] == "$":
+                envVar = token[1:]
+                solvedPath = solvedPath + env.get(envVar)
+            else:
+                solvedPath = solvedPath + "/" + token
+        return solvedPath
+    else:
+        return url
 
 # TODO: change it to make only a syntaxic analisys
 def parseLine(line, lineNum):
@@ -73,7 +84,7 @@ def parseLine(line, lineNum):
     else:
         if kw.comment == tokens[0][0]:
             pass
-        else :
+        else:
             keyword = tokens[0]
             if keyword == kw.add_path:
                 parse_add_path(tokens)
@@ -106,7 +117,7 @@ def parseLine(line, lineNum):
             else:
                 parse_aliases(tokens)
 
-def parser(filename):
+def parse(filename):
     if os.path.exists(filename) == True:
         file = open(filename)
         lineNum = 0

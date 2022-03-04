@@ -1,4 +1,4 @@
-from globals as g
+import globals as g
 
 # add class Path
 def add_path(path):
@@ -37,3 +37,8 @@ def add_alias(alias, value):
 
 def pack(filename):
   return ""
+
+# get file esxtension
+def get_file_ext(file):
+  dot_index = file.find(".")
+  return file[dot_index + 1: len(file)]
