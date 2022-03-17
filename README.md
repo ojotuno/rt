@@ -122,6 +122,10 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
  > This can be a path, an environment varriable or env_va and paths cocatenated by '/'.  e.g `$myenvvar/folder or $var1/$var2/folder` etc. If '/' is the last character in any environment variable, the duplicity it will be resolved atumatically.
 
+ `arguments _arg1_ _arg2_ ...`
+
+> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
+
 #### Script Example:
 ```
 arguments targetFile
