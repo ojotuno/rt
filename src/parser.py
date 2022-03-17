@@ -43,8 +43,8 @@ def parse_pack(tokens):
 
 def parse_run_cmd(tokens):
     command = utils.concat_tokens(tokens[1:])
-    msg.info("Executing command: " + color.blue + command + color.off)
-    msg.flush()
+    #msg.info("Executing command: " + color.blue + command + color.off)
+    #msg.flush()
     try:
         p = subprocess.run(command, shell=True, check=True, universal_newlines=True)
         msg.info("Returned code " + str(p.returncode))
@@ -52,7 +52,8 @@ def parse_run_cmd(tokens):
         msg.info("Returned code " + str(e.returncode))
 
 def parse_print(tokens):
-    return ""
+    message = utils.concat_tokens(tokens[1:])
+    print(message)
 
 def parse_arguments(tokens):
     return ""
@@ -138,4 +139,4 @@ def parse(filename):
 
         file.close()
     else:
-        parser_error(filename + " not found.")
+        msg.error(filename + " not found.")
