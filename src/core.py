@@ -2,18 +2,42 @@ import globals as g
 import parser
 import os
 import tarfile
+import messages as msg
+import utils
 
-def run_packer(rtFile):
+def run_rtfile_processor(rtFile, installation):
+    if True == installation:
+        msg.info("Processing installation recipe..")
+    else:
+        msg.info("Processing recipe...")
     parser.parse(rtFile)
 
 def run_installer(src, dest):
+    # 1.decompres in dest or current dir
     dir = ""
     if len(dest) != 0:
-        dir = dest
+        dir = os.path.abspath(dest)
+        dir = utils.rm_backslah_from_path(dir)
     else:
         dir = os.getcwd() #current working directory
 
-    # TODO
-    pckg = tarfile.open(src, "r:gz")
-    # unpack into dir
+    # 3. unpack into dir
+    tarball = tarfile.open(src, "r:gz")
+    msg.info("Decompressing package \"" + src + "\"...", '')
+    tarball.extractall(dir)
+    msg.append_ok()
+    tarball.close()
+
+    install_foudn = False
+    install_path = ""
+    for currrentDir, dirname, files in os.walk(dir):
+        if "install" in files:
+            install_foudn = True
+            install_path = currrentDir
+            break
+
     # check if install file exist
+    if install_foudn:
+        run_rtfile_processor(install_path + "/install", True)
+    else:
+        msg.warning("Installation recipe not found.")    

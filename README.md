@@ -1,4 +1,4 @@
-# RT - Recipie Tool
+# RT - Recipe Tool
 
 ## Description
 
@@ -11,18 +11,19 @@ It is desing to be stratightfoward, user-friendy and cooperative.
 **No many file to configure**
 
 ## Usage
-Everything you need is a recipie file to give intructions about what you want to do.
+Everything you need is a recipe file to give intructions about what you want to do.
 
 ### How to call rt
 
-`rt src dest*`
+`rt srcFiles dest* `
 
-> src: Can be a recepie file or a package file.
-> dest (optional): Where the package will be unpacked. If empty, will be unpacked in the current directory.
+> srcFile: Can be a recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip, zip
+
+> dest (optinal): destiny where to deccompress the package file. Only valid if srcFile is a package file.
 
 ### How to install a package
 
-When packing it has to be included a file named _install_ that will contain the recepie to install the recepie.
+When packing it has to be included a file named _install_ that will contain the recipe to install the recipe.
 
 ### Features:
 * Add path
@@ -33,7 +34,7 @@ When packing it has to be included a file named _install_ that will contain the 
 * root dir 
 * target dir
 * '>' Run console command
-* Using of recepie arguments. Use those arguments by define them (args = ...)
+* Using of recipe arguments. Use those arguments by define them (args = ...)
 * OS check (TODO: does not make sense if there is no conditionals)
 * read file (TODO)
 * condiiotnal checks (TODO)
@@ -68,7 +69,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 ## Syntax
 `root_dir _path_` 
- > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recepie. Instructions are related to this root
+ > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root
  
 `target_dir _path_` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
@@ -107,7 +108,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 `arguments _arg1_ _arg2_ ...`
 
-> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
+> Set the arguments to use the recipe. If the recipe call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
 
 `pack _filename_`
 

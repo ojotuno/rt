@@ -21,13 +21,13 @@ def ignore_ext(ext):
   g.ext2ignore.append(ext)
 
 def set_root_dir(value):
-  g.root_dir = value;
+  g.root_dir = value
 
-def set_target_dir(value)
-  g.target_dir = value;
+def set_target_dir(value):
+  g.target_dir = value
 
 def print(str):
-  print(str);
+  print(str)
 
 def add_arguments(arg):
   g.argument.append(arg)
@@ -42,3 +42,9 @@ def pack(filename):
 def get_file_ext(file):
   dot_index = file.find(".")
   return file[dot_index + 1: len(file)]
+
+def extract_TAR(tarfile):
+  return""
+
+def extract_ZIP(zipfile):
+  return ""
