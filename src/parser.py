@@ -1,3 +1,4 @@
+from ctypes import util
 from email import utils
 import colors as color
 import os
@@ -59,7 +60,11 @@ def parse_arguments(tokens):
     return ""
 
 def parse_git(tokens):
-    return ""
+    command = utils.concat_tokens(tokens)
+    try:
+        p = subprocess.run(command, shell=True, check=True, universal_newlines=True)
+    except subprocess.CalledProcessError as e:
+        msg.info("Returned code " + str(e.returncode))
 
 def parse_svn(tokens):
     return ""

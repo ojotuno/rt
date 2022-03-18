@@ -4,6 +4,7 @@ import sys
 import info
 import core
 import utils
+import messages as msg
 
 # 
 if __name__ == "__main__":
@@ -25,3 +26,5 @@ if __name__ == "__main__":
       if nargs == 3:
         dest = sys.argv[2]
       core.run_installer(file, dest);            
+    
+    msg.done()
