@@ -41,6 +41,9 @@ root_dir = ""
 #target dir
 target_dir = ""
 
+# install file
+install_file = "install"
+
 # Constants (keywords)
 class Keywords:
     add_path = 'add_path'

@@ -20,11 +20,11 @@ if __name__ == "__main__":
 
     if ext not in packageExt:
       rtFile = sys.argv[1]
-      core.run_rtfile_processor(rtFile)
+      core.run_rtfile_processor(rtFile, False) # from installation = False
     else:
       dest = ""
       if nargs == 3:
         dest = sys.argv[2]
-      core.run_installer(file, dest);            
+      core.run_installer(file, dest, ext);            
     
     msg.done()

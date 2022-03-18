@@ -2,7 +2,6 @@ from ctypes import util
 from email import utils
 import colors as color
 import os
-import subprocess
 import globals as g
 import core_funcs as f
 import messages as msg
@@ -31,7 +30,7 @@ def parse_ignore_ext(tokens):
     
 def parse_root_dir(tokens):
     if len(tokens) == 2:
-        value = resolve_url(tokens[1]) # could be a path, a envvar, env var+paths, aliases and all can be mixted
+        value = utils.resolve_url(tokens[1]) # could be a path, a envvar, env var+paths, aliases and all can be mixted
         f.set_root_dir(value) # root_dir value
     else:
         msg.error("root_dir only acepts one value")
@@ -46,47 +45,27 @@ def parse_run_cmd(tokens):
     command = utils.concat_tokens(tokens[1:])
     #msg.info("Executing command: " + color.blue + command + color.off)
     #msg.flush()
-    try:
-        p = subprocess.run(command, shell=True, check=True, universal_newlines=True)
-        msg.info("Returned code " + str(p.returncode))
-    except subprocess.CalledProcessError as e:
-        msg.info("Returned code " + str(e.returncode))
+    f.run_cmd(command)
 
 def parse_print(tokens):
     message = utils.concat_tokens(tokens[1:])
-    print(message)
+    f.print_str(message)
 
 def parse_arguments(tokens):
     return ""
 
 def parse_git(tokens):
     command = utils.concat_tokens(tokens)
-    try:
-        p = subprocess.run(command, shell=True, check=True, universal_newlines=True)
-    except subprocess.CalledProcessError as e:
-        msg.info("Returned code " + str(e.returncode))
+    f.run_cmd(command)
 
 def parse_svn(tokens):
-    return ""
+    command = utils.concat_tokens(tokens)
+    f.run_cmd(command)
 
 def parse_aliases(tokens, lineNum):
     #check if alias 
     # else syntax error
     msg.syntax_error(lineNum, utils.concat_tokens(tokens))
-
-def resolve_url(url):
-    if url[0] == "$":
-        arg = url.split("/")
-        solvedPath = ""
-        for token in arg:
-            if token[0] == "$":
-                envVar = token[1:]
-                solvedPath = solvedPath + env.get(envVar)
-            else:
-                solvedPath = solvedPath + "/" + token
-        return solvedPath
-    else:
-        return url
 
 # TODO: change it to make only a syntaxic analisys
 def parseLine(line, lineNum):
