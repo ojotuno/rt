@@ -13,7 +13,6 @@ if __name__ == "__main__":
   if nargs == 1 or nargs > 3:
     info.show_info()
   else:
-    #info.show_logo()
     file = sys.argv[1]
     ext = utils.getFullExt(file)
     packageExt = [".rt", ".tar.gz", ".zip"]

@@ -25,6 +25,9 @@ def show_logo():
                                                                                 
 
 def show_info():
+  show_logo()
+  print(colors.off + " Version 0.5")
+  print(colors.off + " ")
   print(colors.off + " Every line has to be formed by " + colors.blue + "keyword " + colors.off + "argument")
   print(colors.off + " Keywords: root_dir, add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext")
   print(colors.off + "Arguments: path/file/extension/evinronment variable with $ as first character")

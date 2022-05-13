@@ -30,7 +30,7 @@ def set_target_dir(value):
   g.target_dir = value
 
 def print_str(str):
-  print(str)
+  msg.print_recipe_msg(str)
 
 def add_arguments(arg):
   g.argument.append(arg)
@@ -58,7 +58,6 @@ def extract_TAR(tar_file, dest):
   tarball.extractall(dest)
   msg.append_ok()
   tarball.close()
-
 
 def extract_ZIP(zipfile):
   msg.error("ZIP files not implemented yet")
