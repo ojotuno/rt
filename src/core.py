@@ -1,16 +1,16 @@
 import globals as g
-import parser
+import fileparser
 import os
 import messages as msg
 import utils
 import core_funcs as f
 
-def run_rtfile_processor(rtFile, installation):
+def process_rtfile(rtFile, installation):
     if True == installation:
         msg.info("Processing installation recipe..")
     else:
         msg.info("Processing recipe...")
-    parser.parse(rtFile)
+    fileparser.parse(rtFile)
 
 def run_installer(src, dest, ext):
     # 1.decompres in dest or current dir
@@ -35,8 +35,11 @@ def run_installer(src, dest, ext):
             install_path = currrentDir
             break
 
-    # check if install file exist
+    # check if "install" filename exist
     if install_foudn:
-        run_rtfile_processor(install_path + "/" + g.install_file, True) # from install = True
+        process_rtfile(install_path + "/" + g.install_file, True) # from install = True
     else:
         msg.warning("Installation recipe not found.")    
+
+def pack():
+    return ""

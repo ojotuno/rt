@@ -32,7 +32,7 @@ arguments = []
 aliases = {}
 
 # keywords
-keywords = ("arguments", "root_dir", "target_dir", "add_path", "add_file", "add_ext",
+keywords = ("args", "root_dir", "target_dir", "add_path", "add_file", "add_ext",
 "ignore_path", "ignore_file", "ignore_ext", "pack", "git", "svn", ">", "print")
 
 # root dir
@@ -60,6 +60,6 @@ class Keywords:
     comment = '#'
     amd = "and"
     print = "print"
-    arguments = "arguments"
+    arguments = "args"
     git = "git"
     svn = "svn"

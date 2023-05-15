@@ -74,14 +74,12 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `target_dir _path_` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
-`add_path _pathSrc _new_pckg_path_ (and ignore_path | ignore_file | ignore_ext and ..)*` 
+`1) add_path _path-to-add_`
+`2): add_path _pathSrc _new_pckg_path_` 
 
-> Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
+>1) Adds *_path-to-add_* and its contain inside the final tar.gz 
+>2) Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
 
-`add_path _path-to-add_ (and ignore_path | ignore_file | ignore_ext and ..)*`
-
-> Adds *_path-to-add_* and its contain inside the final tar.gz
-  
 `add_file _file-to-add_ _path-where-to-add_`
 
 > Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*
@@ -122,15 +120,19 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
  > This can be a path, an environment varriable or env_va and paths cocatenated by '/'.  e.g `$myenvvar/folder or $var1/$var2/folder` etc. If '/' is the last character in any environment variable, the duplicity it will be resolved atumatically.
 
- `arguments _arg1_ _arg2_ ...`
+ `args`
 
-> Set the arguments to use the recepie. If the recepie call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
-
-#### Script Example:
+> the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary. For example:
 ```
-arguments targetFile
+$rt filename1 value2
+print args[0] # this prints filename1
+print argsp[1] #this prints value2
+```
+
+#### Example of pack recipe 
+```
 root_dir $ROOT_DIR
-target_dir targetFile
+target_dir args[0]
 
 > ./createVersionFile.sh
 
@@ -145,6 +147,7 @@ ignore_ext /res/ mp3
 #add config dir inside release folder
 add_path /tmp/config relase/config
 
+#at this momments packs the file with the instructions above. THe recipe can contains as much as packs the users wanted
 pack myversion.tar.gz
 
 git add myversion.tar.gz

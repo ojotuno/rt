@@ -1,4 +1,5 @@
 import env_var as env
+import re # regular expresions
 
 def getFullExt(str):
    index = str.find(".")
@@ -15,19 +16,20 @@ def rm_backslah_from_path(path):
 def concat_tokens(tokens):
    result = ""
    for token in tokens:
-      result = result + token + " "
+      result += token + " "
    return result
 
-def resolve_url(url):
-  if url[0] == "$":
-      arg = url.split("/")
-      solvedPath = ""
-      for token in arg:
-          if token[0] == "$":
-              envVar = token[1:]
-              solvedPath = solvedPath + env.get(envVar)
-          else:
-              solvedPath = solvedPath + "/" + token
-      return solvedPath
-  else:
-      return url
+# resolve a environments vars inside of "$()"" expresion like $(HOME)/$(USER)/dev/projects
+def resolve_env_vars(path):
+   pattern = r'\$\((\w+)\)'
+   matches = re.findall(pattern, path)
+
+   for match in matches:
+      env_variable = match
+      env_value = env.get(env_variable)
+      if env_value:
+         path = path.replace(f'$({env_variable})', env_value)
+      else:
+         print("ERROR: " + env_variable + "environment variable not found")
+   return path
+   

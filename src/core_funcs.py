@@ -3,9 +3,28 @@ import messages as msg
 import subprocess
 import tarfile
 
+kw = g.Keywords()
+
+def tokenize(line, separator = ' '):
+  tokens = []
+  str = ""
+  for char in line:
+    if char == kw.comment:
+      return tokens
+    elif char == separator:
+      tokens.append(str)
+      str = ""
+    else:
+      if char != '\n':
+        str += char
+  if len(str) > 0:
+    tokens.append(str)
+  return tokens
+
+
 # add class Path
-def add_path(path):
-  g.paths2Add.append(path)
+def add_path(srcPath, pathInsidePckg):
+  g.paths2Add.append((srcPath, pathInsidePckg))
 
 # add path into dict
 def add_file(file, newPathInPckg):
