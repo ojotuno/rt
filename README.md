@@ -89,8 +89,14 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 > Adds the file *\_files-to-add\_* inside the package preserving the path inside it.
 
 `add_ext _extensions_ `
+`add_ext .cpp .h `
+`add_ext ./.h ../dir/.txt /tmp/.log `
 
-> Add all the files with the *\_extensions\_* inside the package
+> Add all the files with the *\_extensions\_* inside the package. This can include file from ignores paths. If no path indicated in the extension, by default is checked in the value of "root_dir". This not perrforms a recursive check. See add_ext_recursive in that case. Using add_ext after add_ext_recursive the result overrides the result in case of repettition
+
+`add_ext_recursive _extensions_ `
+
+> The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition.
 
 `ignore_path _path_`
 
@@ -103,10 +109,6 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `ignore_ext _extension_`
 
 > Ignores all the files with the *\_extension\_* extesion
-
-`arguments _arg1_ _arg2_ ...`
-
-> Set the arguments to use the recipe. If the recipe call does not match with the argumentes defined it will raise and error. This tipically goes in the begining of the recepie.
 
 `pack _filename_`
 
@@ -126,7 +128,7 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 ```
 $rt filename1 value2
 print args[0] # this prints filename1
-print argsp[1] #this prints value2
+print args[1] #this prints value2
 ```
 
 #### Example of pack recipe 

@@ -5,6 +5,7 @@ import info
 import core
 import utils
 import messages as msg
+import core_funcs as f
 
 # 
 if __name__ == "__main__":
@@ -17,6 +18,9 @@ if __name__ == "__main__":
     ext = utils.getFullExt(file)
     packageExt = [".rt", ".tar.gz", ".zip"]
 
+    # add all arguments
+    f.add_arguments()
+    
     if ext not in packageExt:
       rtFile = sys.argv[1]
       core.process_rtfile(rtFile, False) # from installation = False
