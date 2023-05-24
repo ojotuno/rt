@@ -81,7 +81,8 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `add_path _pathSrc [as _new_pckg_path_]` 
 
 ```
-add_path /tmp/config as /src/config # inserts config sir from tmp inside of the value of root_dir and then /src/config` 
+# inserts config sir from tmp inside of the value of root_dir and then /src/config
+add_path /tmp/config as /src/config ` 
 ```
 
 > Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
