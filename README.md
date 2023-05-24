@@ -80,9 +80,11 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 `add_path _pathSrc [as _new_pckg_path_]` 
 
-`eg) add_path /tmp/config as /src/config # inserts config sir from tmp inside of the value of root_dir and then /src/config` 
+```
+add_path /tmp/config as /src/config # inserts config sir from tmp inside of the value of root_dir and then /src/config` 
+```
 
->1) Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
+> Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
 
 `add_file _file-to-add_`
 
@@ -92,30 +94,32 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 > Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*. The [as _path-where-to-add_] is optional and if not used the default path is the root_dir
 
 `add_ext _extensions_ [from _path_]` 
-
-`eg) add_ext .cpp .h `
-
-`eg) add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
+```
+add_ext .cpp .h `
+add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
+```
 
 > The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition. The [from path] is optional and if not used the default path is the root_dir
 
 `ignore_path _path_ from [_path]`
 
-`eg) ignore_path /bin 'ignores /bin from root_dir`
+```
+ignore_path /bin 'ignores /bin from root_dir`
 
-`eg) ignore_path /*/bin from /tmp #ignores /tmp/*/bin directories`
+ignore_path /*/bin from /tmp #ignores /tmp/*/bin directories`
 
-`eg) ignore_path /bin from * #ignores all the bin directories`
+ignore_path /bin from * #ignores all the bin directories`
+```
 
 > Ignores the path *\_path\_* and its contains
 > The *\_path\_* can contains a path, args or a env var eg: ignore_path /tmp
 > If the path ignored is not included then it does nothing.
 
 `ignore_file _file_ [from _path]`
-
-`eg) ignore_file file.log from /tmp`
-
-`eg) ignore_file * from /tmp #ignore all files from tmp but not tmp directory`
+```
+ignore_file file.log from /tmp`
+ignore_file * from /tmp #ignore all files from tmp but not tmp directory`
+```
 
 > Ignores the file *\_file\_*
 > The *\_file\_* can contains a path, args or a env var eg: "ignore_file file.log from /tmp". The [from path] is optional and if not used the default path is the root_dir
