@@ -1,56 +1,28 @@
-# class path
-class Path:
-    path: ""  # path value
-    pathInPckg: ""  # path name inside tha package
-    ext2ignore: []  # extensions to ignore while adding the path
-    files2Ignore: []  # files to ignore while adding the files
-    paths2Ignore: []  # paths/ subpaths to ignore while adding the path
+from enum import Enum
+
+class action_t(Enum):
+    none = -1
+    add_path = 0
+    add_file = 1
+    add_ext = 2
+    ignore_path = 3
+    ignore_file = 4
+    ignore_ext = 5
 
 
-# paths to add list<Path>
-paths2Add = []
+class Actions:
+    action: action_t.none
+    data = "" # first argument = path, pattern, file or extension
+    from_as = "" # argument 2. empty = root_dir
 
-# files to add
-# dict {path : newPathInPckg}
-files2Add = []
-
-# extension to add
-# dict {path, dict{ext, recursive}}
-ext2Add = {}
-
-# files to ignore
-files2ignore = []
-
-# paths to ignore
-paths2ignore = []
-
-# extension to ignore
-ext2ignore = []
+#dict instructions {path, actions}
+instrcutions = {}
 
 # recepie arguments <name, value>
 arguments = []
 
 # aliases <alias, value>
 aliases = {}
-
-# keywords
-keywords = (
-    "args",
-    "root_dir",
-    "target_dir",
-    "add_path",
-    "add_file",
-    "add_ext",
-    "add_ext_recursive",
-    "ignore_path",
-    "ignore_file",
-    "ignore_ext",
-    "pack",
-    "git",
-    "svn",
-    ">",
-    "print",
-)
 
 # root dir
 root_dir = ""
@@ -61,13 +33,30 @@ target_dir = ""
 # install file
 install_file = "install"
 
+# keywords
+keywords = (
+    "args",
+    "root_dir",
+    "target_dir",
+    "add_path",
+    "add_file",
+    "add_ext",
+    "ignore_path",
+    "ignore_file",
+    "ignore_ext",
+    "pack",
+    "git",
+    "svn",
+    ">",
+    "print"
+)
+
 
 # Constants (keywords)
 class Keywords:
     add_path = "add_path"
     add_file = "add_file"
     add_ext = "add_ext"
-    add_ext_recursive = "add_ext_recursive"
     ignore_path = "ignore_path"
     ignore_file = "ignore_file"
     ignore_ext = "ignore_ext"

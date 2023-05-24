@@ -77,8 +77,13 @@ def add_alias(alias, value):
 
 
 def pack(filename):
-    # pack
-    clean_data_from_instructions()
+    # una instruccion de add o ignore va a mirar si ya existe ese path sobre ese fichero, path o ext
+    # y si existe, cambia su fucnion a la ultima instruccion puesta.
+    # Si una instruccion es sobre un subdirectorio de un path ya existente se anade y tiene prioridad sobre una accion recursiva,
+    #es decir, si se ha puesto ignore_ext .
+
+    # clean data for the new pack
+    g.instrcutions.clear
 
 
 def run_cmd(command):
@@ -112,11 +117,4 @@ def compress_TAR(tar_file, files, dest):
 def extract_ZIP(zipfile):
     msg.error("ZIP files not implemented yet")
 
-
-def clean_data_from_instructions():
-    g.paths2Add.clear()
-    g.files2Add.clear()
-    g.ext2Add.clear()
-    g.files2ignore.clear()
-    g.paths2ignore.clear()
-    g.ext2ignore.clear()
+    

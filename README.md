@@ -34,14 +34,15 @@ When packing it has to be included a file named _install_ that will contain the 
 * root dir 
 * target dir
 * '>' Run console command
-* Using of recipe arguments. Use those arguments by define them (args = ...)
+* Using of recipe coomand arguments
 * OS check (TODO: does not make sense if there is no conditionals)
 * read file (TODO)
 * condiiotnal checks (TODO)
 * variable declaratinos (TODO)
-* '$' use of environment variables
+* '$()' use of environment variables
 * pack builds, check dependencies and install packages
 * print messages (print "msg")
+* contact print messages by using spaces (print "msg" "msg2")
 * git and svn native support 
 * build your app
 
@@ -75,55 +76,51 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
 `1) add_path _path-to-add_`
-`2): add_path _pathSrc _new_pckg_path_` 
+`2) add_path _pathSrc [as _new_pckg_path_]` 
+`eg) add_path /tmp/config as /src/config # inserts config sir from tmp inside of the value of root_dir and then /src/config` 
+>1) Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
 
->1) Adds *_path-to-add_* and its contain inside the final tar.gz 
->2) Adds _\_pathSrc\__ and its contain inside the package file as *\_new_pckg_path\_*. If path does not exist it will be created inside the pacakge
-
-`add_file _file-to-add_ _path-where-to-add_`
-
-> Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*
-
-`add_file _files-to-add_`
+`add_file _file-to-add_`
+`add_file _file-to-add_ [as _path-where-to-add_]`
 
 > Adds the file *\_files-to-add\_* inside the package preserving the path inside it.
+> Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*. The [as _path-where-to-add_] is optional and if not used the default path is the root_dir
 
-`add_ext _extensions_ `
-`add_ext .cpp .h `
-`add_ext ./.h ../dir/.txt /tmp/.log `
+`add_ext _extensions_ [from _path_]` 
+`example 1) add_ext .cpp .h `
+`example 2) add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
 
-> Add all the files with the *\_extensions\_* inside the package. This can include file from ignores paths. If no path indicated in the extension, by default is checked in the value of "root_dir". This not perrforms a recursive check. See add_ext_recursive in that case. Using add_ext after add_ext_recursive the result overrides the result in case of repettition
+> The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition. The [from path] is optional and if not used the default path is the root_dir
 
-`add_ext_recursive _extensions_ `
-
-> The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition.
-
-`ignore_path _path_`
+`ignore_path _path_ from [_path]`
+`eg) ignore_path /bin 'ignores /bin from root_dir`
+`eg) ignore_path /*/bin from /tmp #ignores /tmp/*/bin directories`
+`eg) ignore_path /bin from * #ignores all the bin directories`
 
 > Ignores the path *\_path\_* and its contains
+> The *\_path\_* can contains a path, args or a env var eg: ignore_path /tmp
+> If the path ignored is not included then it does nothing.
 
-`ignore_file _file-to-ignore_`
+`ignore_file _file_ [from _path]`
+`eg) ignore_file file.log from /tmp`
+`eg) ignore_file * from /tmp #ignore all files from tmp but not tmp directory`
 
-> Ignores the file *\_file-to-ignore\_*
+> Ignores the file *\_file\_*
+> The *\_file\_* can contains a path, args or a env var eg: "ignore_file file.log from /tmp". The [from path] is optional and if not used the default path is the root_dir
 
-`ignore_ext _extension_`
+`ignore_ext _extension_ [from _path_]`
 
-> Ignores all the files with the *\_extension\_* extesion
+> Ignores all the files with the *\_extension\_* extesion. The [from path] is optional and if not used the default path is the root_dir
 
 `pack _filename_`
 
 > Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.
 
-`print _str_`
-
+`print "_str_ ...`
 > Prints out the *\_str\_*
-
-`_path_`
-
- > This can be a path, an environment varriable or env_va and paths cocatenated by '/'.  e.g `$myenvvar/folder or $var1/$var2/folder` etc. If '/' is the last character in any environment variable, the duplicity it will be resolved atumatically.
+> To concatenate strings uses spaces. eg) print the name of
 
  `args`
-
 > the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary. For example:
 ```
 $rt filename1 value2
@@ -144,10 +141,13 @@ ignore_ext c
 ignore_ext o
 
 #ignore mp3 files only from ./res dir
-ignore_ext /res/ mp3
+ignore_ext mp3 from ./res
 
-#add config dir inside release folder
-add_path /tmp/config relase/config
+#ignore .log files from ./bin dir and all the subdirectories
+ignore_ext log from ./bin*
+
+#add the content of config dir inside "release" folder
+add_path /tmp/config as /relase/config
 
 #at this momments packs the file with the instructions above. THe recipe can contains as much as packs the users wanted
 pack myversion.tar.gz
