@@ -70,31 +70,41 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
 ## Syntax
 `root_dir _path_` 
+
  > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root
  
 `target_dir _path_` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
-`1) add_path _path-to-add_`
-`2) add_path _pathSrc [as _new_pckg_path_]` 
+`add_path _path-to-add_`
+
+`add_path _pathSrc [as _new_pckg_path_]` 
+
 `eg) add_path /tmp/config as /src/config # inserts config sir from tmp inside of the value of root_dir and then /src/config` 
+
 >1) Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
 
 `add_file _file-to-add_`
+
 `add_file _file-to-add_ [as _path-where-to-add_]`
 
 > Adds the file *\_files-to-add\_* inside the package preserving the path inside it.
 > Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*. The [as _path-where-to-add_] is optional and if not used the default path is the root_dir
 
 `add_ext _extensions_ [from _path_]` 
-`example 1) add_ext .cpp .h `
-`example 2) add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
+
+`eg) add_ext .cpp .h `
+
+`eg) add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
 
 > The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition. The [from path] is optional and if not used the default path is the root_dir
 
 `ignore_path _path_ from [_path]`
+
 `eg) ignore_path /bin 'ignores /bin from root_dir`
+
 `eg) ignore_path /*/bin from /tmp #ignores /tmp/*/bin directories`
+
 `eg) ignore_path /bin from * #ignores all the bin directories`
 
 > Ignores the path *\_path\_* and its contains
@@ -102,7 +112,9 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 > If the path ignored is not included then it does nothing.
 
 `ignore_file _file_ [from _path]`
+
 `eg) ignore_file file.log from /tmp`
+
 `eg) ignore_file * from /tmp #ignore all files from tmp but not tmp directory`
 
 > Ignores the file *\_file\_*
@@ -117,10 +129,12 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 > Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.
 
 `print "_str_ ...`
+
 > Prints out the *\_str\_*
 > To concatenate strings uses spaces. eg) print the name of
 
  `args`
+
 > the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary. For example:
 ```
 $rt filename1 value2
