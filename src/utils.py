@@ -7,7 +7,6 @@ def getFullExt(str):
     index = str.find(".")
     return str[index:]
 
-
 def rm_backslah_from_path(path):
     szPath = len(path)
 

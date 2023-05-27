@@ -60,7 +60,7 @@ To create a package the order below must be followed:
 
 2. packing instructions 
  
-`add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, etc`
+`add, ignore, root_dir, target_dir`
 
 3. pack call 
 
@@ -69,74 +69,29 @@ To create a package the order below must be followed:
 NOTE: Between steps can be other instructions like create_file, or invoke a script
 
 ## Syntax
-`root_dir _path_` 
+`root_dir _path_ as root_dir_in_path` 
 
- > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root
+ > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root. The root_dir_in_path indicates the path in the package where stating to include the files, if not used, the files will be inserted exacly as the root_dir indicates.
  
 `target_dir _path_` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
-`add_path _path-to-add_`
+`add [_pattern_] [as _path_]*` 
 
-`add_path _pathSrc [as _new_pckg_path_]` 
+> Add a pattern into the package. If used [as path], insertes the pattern inside the _path_ indicated.
 
-```
-# inserts config sir from tmp inside of the value of root_dir and then /src/config
-add_path /tmp/config as /src/config ` 
-```
+`ignore [_pattern_] from [_path_]*`
 
-> Adds *_path-to-add_* and its contain inside the final tar.gz. the [as _new_pckg_path_] inserts the file inside the virtual path inside the package file as *\_new_pckg_path\_*.
-
-`add_file _file-to-add_`
-
-`add_file _file-to-add_ [as _path-where-to-add_]`
-
-> Adds the file *\_files-to-add\_* inside the package preserving the path inside it.
-> Adds the file *\_file-to-add\_* inside the path *\_path-where-to-add\_*. The [as _path-where-to-add_] is optional and if not used the default path is the root_dir
-
-`add_ext _extensions_ [from _path_]` 
-```
-add_ext .cpp .h `
-add_ext .cpp .h from ./dir/* #add extension from dir and subdirectories`
-```
-
-> The same as add_ext but with recursive checking. Using add_ext_recursive after using add_ext it overrides the result in case of path and extension repetition. The [from path] is optional and if not used the default path is the root_dir
-
-`ignore_path _path_ from [_path]`
-
-```
-ignore_path /bin 'ignores /bin from root_dir`
-
-ignore_path /*/bin from /tmp #ignores /tmp/*/bin directories`
-
-ignore_path /bin from * #ignores all the bin directories`
-```
-
-> Ignores the path *\_path\_* and its contains
-> The *\_path\_* can contains a path, args or a env var eg: ignore_path /tmp
-> If the path ignored is not included then it does nothing.
-
-`ignore_file _file_ [from _path]`
-```
-ignore_file file.log from /tmp`
-ignore_file * from /tmp #ignore all files from tmp but not tmp directory`
-```
-
-> Ignores the file *\_file\_*
-> The *\_file\_* can contains a path, args or a env var eg: "ignore_file file.log from /tmp". The [from path] is optional and if not used the default path is the root_dir
-
-`ignore_ext _extension_ [from _path_]`
-
-> Ignores all the files with the *\_extension\_* extesion. The [from path] is optional and if not used the default path is the root_dir
+> Ignores the pattern from being inserted in the package. The [from path] is optional, if used goes to the ignore applies to the _path_ indicated. if not used the default path is the root_dir.
 
 `pack _filename_`
 
 > Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.
 
-`print "_str_ ...`
+`print "_str_" ...`
 
 > Prints out the *\_str\_*
-> To concatenate strings uses spaces. eg) print the name of
+> To concatenate strings uses spaces. 
 
  `args`
 
@@ -149,29 +104,34 @@ print args[1] #this prints value2
 
 #### Example of pack recipe 
 ```
-root_dir $ROOT_DIR
-target_dir args[0]
+root_dir $ROOT_DIR as root_path_in_package # just for packing 
+target_dir args[0] # just for packing
 
 > ./createVersionFile.sh
 
-add_file version.h
-ignore_ext cpp
-ignore_ext c
-ignore_ext o
+add version.h
+ignore *.cpp
+ignore *.c
+ignore *.o
+
+#ignore path scripts inside the root dir
+ignore ./scripts
 
 #ignore mp3 files only from ./res dir
-ignore_ext mp3 from ./res
+ignore .mp3 from ./res
 
 #ignore .log files from ./bin dir and all the subdirectories
-ignore_ext log from ./bin*
+ignore .log from ./bin*
 
 #add the content of config dir inside "release" folder
-add_path /tmp/config as /relase/config
+add /tmp/config as /relase/config
+
+print "Creating pacakge.."
 
 #at this momments packs the file with the instructions above. THe recipe can contains as much as packs the users wanted
-pack myversion.tar.gz
+pack my-pckg.rt
 
-git add myversion.tar.gz
+git add my-pckg.rt
 git commit -m "uploaded new version"
 git push
 ```

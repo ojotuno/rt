@@ -9,6 +9,59 @@ import utils
 
 kw = g.Keywords()
 
+def parseLine(line, lineNum):
+    tokens = f.tokenize(line, lineNum)
+    nTokens = len(tokens)
+    if nTokens == 0:
+        pass
+    else:
+        keyword = tokens[0]
+        if keyword == kw.add_path:
+            parse_add_path(tokens, lineNum)
+        elif keyword == kw.add_file:
+            parse_add_file(tokens, lineNum)
+        elif keyword == kw.add_ext:
+            parse_add_ext(tokens, False, lineNum)
+        elif keyword == kw.add_ext_recursive:
+            parse_add_ext(tokens, True, lineNum)
+        elif keyword == kw.ignore_path:
+            parse_ignore_path(tokens, lineNum)
+        elif keyword == kw.ignore_file:
+            parse_ignore_file(tokens, lineNum)
+        elif keyword == kw.ignore_ext:
+            parse_ignore_ext(tokens, lineNum)
+        elif keyword == kw.root_dir:
+            parse_root_dir(tokens, lineNum)
+        elif keyword == kw.target_dir:
+            parse_target_dir(tokens, lineNum)
+        elif keyword == kw.pack:
+            parse_pack(tokens, lineNum)
+        elif keyword == kw.run_cmd:
+            parse_run_cmd(tokens)
+        elif keyword == kw.print:
+            parse_print(tokens)
+        elif keyword == kw.git:
+            parse_git(tokens, lineNum)
+        elif keyword == kw.svn:
+            parse_svn(tokens, lineNum)
+        else:
+            parse_aliases(tokens, lineNum)
+
+
+def parse(filename):
+    if os.path.exists(filename) == True:
+        file = open(filename)
+        lineNum = 0
+
+        # read recepie file
+        for line in file:
+            lineNum = lineNum + 1
+            parseLine(line, lineNum)
+
+        file.close()
+    else:
+        msg.error(filename + " not found.")
+
 ## Actions ##
 ## Actions cannot be executed if there are syntax errors
 def parse_pack(tokens):
@@ -99,14 +152,20 @@ def parse_ignore_ext(tokens, lineNum):
 
 def parse_root_dir(tokens):
     if len(tokens) == 2:
-        f.set_root_dir(tokens[1])  # root_dir value
+        if "*" not in tokens[1]:
+            f.set_root_dir(utils.resolve(tokens[1]))  # root_dir value
+        else:
+            msg.syntax_error("root_dir cannot conatins * in the path")
     else:
         msg.syntax_error("root_dir only accepts one value")
 
 
 def parse_target_dir(tokens):
     if len(tokens) == 2:
-        f.set_target_dir(tokens[1])  # root_dir value
+        if "*" not in tokens[1]:
+            f.set_target_dir(utils.resolve(tokens[1]))  # root_dir value
+        else:
+            msg.syntax_error("target_dir cannot conatins * in the path")
     else:
         msg.syntax_error("target_dir only accepts one value")
 
@@ -116,55 +175,4 @@ def parse_aliases(tokens, lineNum):
     msg.syntax_error(lineNum, "parse_aliases " + utils.concat_tokens(tokens))
 
 
-def parseLine(line, lineNum):
-    tokens = f.tokenize(line, lineNum)
-    nTokens = len(tokens)
-    if nTokens == 0:
-        pass
-    else:
-        keyword = tokens[0]
-        if keyword == kw.add_path:
-            parse_add_path(tokens, lineNum)
-        elif keyword == kw.add_file:
-            parse_add_file(tokens, lineNum)
-        elif keyword == kw.add_ext:
-            parse_add_ext(tokens, False, lineNum)
-        elif keyword == kw.add_ext_recursive:
-            parse_add_ext(tokens, True, lineNum)
-        elif keyword == kw.ignore_path:
-            parse_ignore_path(tokens, lineNum)
-        elif keyword == kw.ignore_file:
-            parse_ignore_file(tokens, lineNum)
-        elif keyword == kw.ignore_ext:
-            parse_ignore_ext(tokens, lineNum)
-        elif keyword == kw.root_dir:
-            parse_root_dir(tokens, lineNum)
-        elif keyword == kw.target_dir:
-            parse_target_dir(tokens, lineNum)
-        elif keyword == kw.pack:
-            parse_pack(tokens, lineNum)
-        elif keyword == kw.run_cmd:
-            parse_run_cmd(tokens)
-        elif keyword == kw.print:
-            parse_print(tokens)
-        elif keyword == kw.git:
-            parse_git(tokens, lineNum)
-        elif keyword == kw.svn:
-            parse_svn(tokens, lineNum)
-        else:
-            parse_aliases(tokens, lineNum)
 
-
-def parse(filename):
-    if os.path.exists(filename) == True:
-        file = open(filename)
-        lineNum = 0
-
-        # read recepie file
-        for line in file:
-            lineNum = lineNum + 1
-            parseLine(line, lineNum)
-
-        file.close()
-    else:
-        msg.error(filename + " not found.")

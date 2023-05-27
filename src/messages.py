@@ -7,7 +7,6 @@ rt_debug = "[rt-debug] "
 g_error = False
 g_counter = 0
 
-
 def check_errors():
     return g_error
 

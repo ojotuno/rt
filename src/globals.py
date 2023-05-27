@@ -24,13 +24,13 @@ arguments = []
 # aliases <alias, value>
 aliases = {}
 
-# root dir
-root_dir = ""
+# root dir -> pair (root_dir, path_in_package)
+root_dir = None
 
 # target dir
 target_dir = ""
 
-# install file
+# install file const
 install_file = "install"
 
 # keywords
@@ -38,12 +38,8 @@ keywords = (
     "args",
     "root_dir",
     "target_dir",
-    "add_path",
-    "add_file",
-    "add_ext",
-    "ignore_path",
-    "ignore_file",
-    "ignore_ext",
+    "add",
+    "ignore"
     "pack",
     "git",
     "svn",
@@ -51,15 +47,10 @@ keywords = (
     "print"
 )
 
-
 # Constants (keywords)
 class Keywords:
-    add_path = "add_path"
-    add_file = "add_file"
-    add_ext = "add_ext"
-    ignore_path = "ignore_path"
-    ignore_file = "ignore_file"
-    ignore_ext = "ignore_ext"
+    add = "add"
+    ignore = "ignore"
     root_dir = "root_dir"  # mandatory
     target_dir = "target_dir"  # mandatory
     pack = "pack"  # mandatory (meanwhile install does not exist)
