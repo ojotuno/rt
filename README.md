@@ -2,37 +2,33 @@
 
 ## Description
 
-RT is a packing tool to bundle, check and install applications and dependencies.
+RT is a packing tool to bundle, check and install applications and dependencies. 
 
-It is desing to be stratightfoward, user-friendy and cooperative.
+It designed to be extremely easy and basic to use. 
 
-**Increate the power with scipt calls**
-**No many options to remember**
-**No many file to configure**
+**Increase the power with scipt calls**
+**No configuration needed, just python**
 
 ## Usage
 Everything you need is a recipe file to give intructions about what you want to do.
+When calling RT with and .rt, .tar.gz or .zip file as argumen, it will uncompress and search for a a file named "install", this files should contains the recipe.
 
 ### How to call rt
 
-`rt srcFiles dest* `
+`rt rt-file [ARGS] `
+`rt recipe [ARGS] `
 
-> srcFile: Can be a recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip, zip
+> rt-file or recipe: Can be a RT recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip or zip otherwise will try to read the file as a recipe.
 
-> dest (optinal): destiny where to deccompress the package file. Only valid if srcFile is a package file.
+> ARGS: argument that can be accesed from built-in array "args".
 
 ### How to install a package
 
 When packing it has to be included a file named _install_ that will contain the recipe to install the recipe.
 
 ### Features:
-* Add path
-* Add file
-* Add extension
-* Ignore path
-* Ignore extension
-* root dir 
-* target dir
+* Add / ignore paths, files and extensions
+* root dir and target_dir 
 * '>' Run console command
 * Using of recipe coomand arguments
 * OS check (TODO: does not make sense if there is no conditionals)
@@ -42,13 +38,12 @@ When packing it has to be included a file named _install_ that will contain the 
 * '$()' use of environment variables
 * pack builds, check dependencies and install packages
 * print messages (print "msg")
-* contact print messages by using spaces (print "msg" "msg2")
+* concact print messages by using spaces (print "msg" "msg2")
 * git and svn native support 
-* build your app
 
 ### Config File:
-* Bind compiler tools
-* create aliases
+* Bind compiler tools (TODO)
+* create aliases (TODO)
 
 ### Instrcutions to create a package:
 
