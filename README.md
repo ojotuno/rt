@@ -11,7 +11,7 @@ It designed to be extremely easy and basic to use.
 
 ## Usage
 Everything you need is a recipe file to give intructions about what you want to do.
-When calling RT with and .rt, .tar.gz or .zip file as argumen, it will uncompress and search for a a file named "install", this files should contains the recipe.
+When calling RT with and .rt, .tar.gz or .zip file as argument it will extract the file and will search for the _install_ file.
 
 ### How to call rt
 
@@ -45,7 +45,7 @@ When packing it has to be included a file named _install_ that will contain the 
 * Bind compiler tools (TODO)
 * create aliases (TODO)
 
-### Instrcutions to create a package:
+### Instructions to create a package:
 
 To create a package the order below must be followed: 
 
