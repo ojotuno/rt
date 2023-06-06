@@ -15,11 +15,13 @@ def rm_backslah_from_path(path):
     else:
         return path
 
-
 def concat_tokens(tokens):
     result = ""
+    rexpr = r"\".*\""
     for token in tokens:
-        result += str(token) + " "
+        str = re.match(rexpr, token)
+        if str is not None:
+            result += (str.group())[1:-1]
     return result
 
 def resolve(str, lineNum):
