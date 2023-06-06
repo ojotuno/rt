@@ -90,7 +90,12 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 
  `args`
 
-> the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary. For example:
+> the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary.
+
+ `$(ENV)`
+
+> Get the value of the environmente variable ENV
+
 ```
 $rt filename1 value2
 print args[0] # this prints filename1

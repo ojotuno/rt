@@ -36,8 +36,11 @@ def ok():
     sys.stdout.flush()
 
 
-def error(lineNun, msg):
-    print(rt + c.red + "Error in line " + str(lineNun) + ": " + msg + c.off)
+def error(msg, lineNun = -1):
+    if lineNun == -1:
+        print(rt + c.red + "Error: " + msg + c.off)
+    else:
+        print(rt + c.red + "Error in line " + str(lineNun) + ": " + msg + c.off)
     global g_error
     global g_counter
     g_error = True

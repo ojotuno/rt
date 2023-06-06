@@ -1,76 +1,51 @@
 import colors
 
-def show_logo():                                                                         
-  print("                                                                              ")
-  print("     %@@@@@@@@@@@@@@@@@@@@@%*          .@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.  ")
-  print("     &@@@@@&&&&&&&&&@@@@@@@@@@@*        #&&&&&&&&&&&&&@@@@@@@&&&&&&&&&&&&&#   ")
-  print("     &@@@@@/            ,&@@@@@@%                     (@@@@@#                 ")
-  print("     &@@@@@/              ,@@@@@@#                    (@@@@@#                 ")
-  print("     &@@@@@/               #@@@@@&                    (@@@@@#                 ")
-  print("     &@@@@@/               %@@@@@#                    (@@@@@#                 ")
-  print("     &@@@@@/              %@@@@@&                     (@@@@@#                 ")
-  print("     &@@@@@/           (@@@@@@@(                      (@@@@@#                 ")
-  print("     &@@@@@@@@@@@@@@@@@@@@@@%.                        (@@@@@#                 ")
-  print("     &@@@@@@@@@@@@@@@@@@@(.                           (@@@@@#                 ")
-  print("     &@@@@@/       .(@@@@@@@/                         (@@@@@#                 ")
-  print("     &@@@@@/          .&@@@@@@.                       (@@@@@#                 ")
-  print("     &@@@@@/            /@@@@@@*                      (@@@@@#                 ")
-  print("     &@@@@@/             /@@@@@@*                     (@@@@@#                 ")
-  print("     &@@@@@/              /@@@@@@,                    (@@@@@#                 ")
-  print("     &@@@@@/               /@@@@@@*                   (@@@@@#                 ")
-  print("     &@@@@@/                (@@@@@@*                  (@@@@@#                 ")
-  print("     &@@@@@/                 (@@@@@@,                 (@@@@@#                 ")
-  print("     .(###/                   .(###(.                  (###(.                 ")
-  print("                                                                              ")
-                                                                                
+def show_logo():        
+                                                                                                                            
+  print(colors.red +"version 0.7.1")
+  print(colors.green + """
+ .----------------.  .----------------. 
+| .--------------. || .--------------. |
+| |  _______     | || |  _________   | |
+| | |_   __ \    | || | |  _   _  |  | |
+| |   | |__) |   | || | |_/ | | \_|  | |
+| |   |  __ /    | || |     | |      | |
+| |  _| |  \ \_  | || |    _| |_     | |
+| | |____| |___| | || |   |_____|    | |
+| |              | || |              | |
+| '--------------' || '--------------' |
+ '----------------'  '----------------' 
+ """)
+                                                              
 
 def show_info():
   show_logo()
-  print(colors.off + " Version 0.5")
+ 
   print(colors.off + " ")
-  print(colors.off + " Every line has to be formed by " + colors.blue + "keyword " + colors.off + "argument")
-  print(colors.off + " Keywords: root_dir, add_path, add_file, add_ext, ignore_path, ignore_file, ignore_ext, print, args, git, svn")
-  print(colors.off + "Arguments: path/file/extension/evinronment variable with $ as first character")
+  print(colors.off + "Every line has to be formed by " + colors.blue + "keyword " + colors.yellow + "argument")
+  print(colors.off + "Keywords: root_dir, target_dir, add, ignore, print, args, git, svn")
+  print(colors.off + "Arguments: path/patterns/file/extension/evinronment variable with inside of the expresion $() ")
   print(colors.off + "")
-  print(colors.off + "Format of keywords:")
+  print(colors.blue + "root_dir _path_ as root_dir_in_path ")
+  print(colors.off + "> Indicates the root directory _path_ where start to walk. Can be changed at any point of the recipe. Instructions are related to this root. The root_dir_in_path indicates the path in the package where stating to include the files, if not used, the files will be inserted exacly as the root_dir indicates.")
+  print(colors.off + " ")
+  print(colors.blue + "target_dir _path_ ")
+  print(colors.off + ">  Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.")
   print(colors.off + "")
-  print(colors.off + "- root_dir = path|$(var)  (MANDATORY)")
-  print(colors.off + "  -> Indicates the root directory where start to walk")
-  print(colors.off + "- target_dir = path|$(var) (MANDATORY)")
-  print(colors.off + "  -> Indicates the target directory where the file will be created")
-  print(colors.off + "- target_file = filename or $(var) (MANDATORY)")
-  print(colors.off + "  -> Indicates the target filename to be created")
+  print(colors.blue + "add [_pattern_] [as _path_]* ")
+  print(colors.off + "> Add a pattern into the package. If used [as path], insertes the pattern inside the _path_ indicated.")
   print(colors.off + "")
-  print(colors.off + "- add_path path-to-add|$var path-name-inside_tar_gz")
-  print(colors.off + "  -> Adds a 'path-to-add' inside_tar_gz' and its contain inside the tar.gz file as 'new-path-inside_tar_gz'")
-  print(colors.off + "- add_path path-to-add|$var")
-  print(colors.off + "  -> Adds 'path-to-add' and its contain inside the final tar.gz")
+  print(colors.blue + "ignore [_pattern_] from [_path_]*")
+  print(colors.off + "> Ignores the pattern from being inserted in the package. The [from path] is optional, if used goes to the ignore applies to the _path_ indicated. if not used the default path is the root_dir.")
   print(colors.off + "")
-  print(colors.off + "- add_file file-to-add ")
-  print(colors.off + "- add_file file-to-add path-where-to-add ")
-  print(colors.off + "-> Adds the file 'file-to-add' inside the path 'path-where-to-add'")
+  print(colors.blue + "pack _filename_`")
+  print(colors.off + "> Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.")
   print(colors.off + "")
-  print(colors.off + "- add_ext path/extension")
-  print(colors.off + "-> Add all the files with a certains extension inside the tar.gz. Path can be empty")
+  print(colors.blue + "print \"_str_\" ...")
+  print(colors.off + "> Prints out the *\_str\_*. To concatenate strings uses spaces.")
   print(colors.off + "")
-  print(colors.off + "- ignore_path path")
-  print(colors.off + "-> Ignore a certain path")
+  print(colors.blue + "args`")
+  print(colors.off + "> The \"args\" keyword contains the value of the arguments being the first position the first argument, not the name of the binary.")
   print(colors.off + "")
-  print(colors.off + "- ignore_file file-to-ignore|regex ")
-  print(colors.off + "-> Ignores a certain file")
-  print(colors.off + "")
-  print(colors.off + "- ignore_ext path/extension")
-  print(colors.off + "-> Ignores all the files with the indicated extesion. Path can be empty")
-  print(colors.off + "")
-  print(colors.off + "-> Create a file")
-  print(colors.off + "-> create_file _filedesc_ _path_filename_")
-  print(colors.off + "")
-  print(colors.off + "-> Write a file")
-  print(colors.off + "-> write_file _filedesc_ '_text_' (could be more than one line)")
-  print(colors.off + "")
-  print(colors.off + "-> Packs the target file- In this point begins the creation of the target file with all the instructions.")
-  print(colors.off + "   The intructions that afects to pack after this point will be ignored (add_* and ignore_*)  ")
-  print(colors.off + "-> write_file _filedesc_ '_text_' (could be more than one line)")
-  print(colors.off + "")
-  print(colors.off + "-> Environment Variables:")
-  print(colors.off + "-> $(ENV_VAR) ")
+  print(colors.blue + "$(ENV)")
+  print(colors.off + "> Get the value of the environmente variable ENV")
