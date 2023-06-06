@@ -43,10 +43,10 @@ def resolve_env_vars(path, lineNum):
             if env_value:
                 path = path.replace(f"$({env_variable})", env_value)
             else:
-                msg.error(lineNum, env_variable + " environment variable not found")
+                msg.error(env_variable + " environment variable not found", lineNum)
             return path
         except:
-            msg.error(str(lineNum), "Environment variable in line " + env_variable + " does not exists")
+            msg.error("Environment variable in line " + env_variable + " does not exists", lineNum)
             exit()
 
 def resolve_args(argsStr, lineNum):
@@ -57,7 +57,7 @@ def resolve_args(argsStr, lineNum):
         if len(g.arguments) > index:
             return g.arguments[index]
         else:
-            msg.error(lineNum, "Argument index out of range")
+            msg.error("Argument index out of range", lineNum)
     
     return argsStr
 
