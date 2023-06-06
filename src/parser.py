@@ -6,6 +6,19 @@ import utils
 
 kw = g.Keywords()
 
+def parse(filename):
+    if os.path.exists(filename) == True:
+        file = open(filename)
+        lineNum = 0
+        # read recepie file
+        for line in file:
+            lineNum = lineNum + 1
+            parseLine(line, lineNum)
+
+        file.close()
+    else:
+        msg.error(filename + " not found.")
+
 def parseLine(line, lineNum):
     tokens = cf.tokenize(line, lineNum)
     nTokens = len(tokens)
@@ -34,19 +47,6 @@ def parseLine(line, lineNum):
         else:
             msg.syntax_error(lineNum, "Keyword not recognised")
 
-
-def parse(filename):
-    if os.path.exists(filename) == True:
-        file = open(filename)
-        lineNum = 0
-        # read recepie file
-        for line in file:
-            lineNum = lineNum + 1
-            parseLine(line, lineNum)
-
-        file.close()
-    else:
-        msg.error(filename + " not found.")
 
 ######################## Actions ########################
 def parse_pack(tokens, lineNum):

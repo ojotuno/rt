@@ -40,6 +40,3 @@ def run_installer(src, dest, ext):
         process_rtfile(install_path + "/" + g.install_file, True) # from install = True
     else:
         msg.warning("Installation recipe not found.")    
-
-def pack():
-    return ""

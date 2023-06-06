@@ -33,20 +33,6 @@ target_dir = ""
 # install file const
 install_file = "install"
 
-# keywords
-keywords = (
-    "args",
-    "root_dir",
-    "target_dir",
-    "add",
-    "ignore"
-    "pack",
-    "git",
-    "svn",
-    ">",
-    "print"
-)
-
 # Constants (keywords)
 class Keywords:
     add = "add"
