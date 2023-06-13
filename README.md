@@ -2,12 +2,12 @@
 
 ## Description
 
-RT is a packing tool to bundle, check and install applications and dependencies. 
+RT is a tool to pack, check and install applications and dependencies. 
 
 It designed to be extremely easy and basic to use. 
 
 **Increase the power with scipt calls**
-**No configuration needed, just python**
+**No configuration needed, just python 3**
 
 ## Usage
 Everything you need is a recipe file to give intructions about what you want to do.
@@ -16,9 +16,10 @@ When calling RT with and .rt, .tar.gz or .zip file as argument it will extract t
 ### How to call rt
 
 `rt rt-file [ARGS] `
+
 `rt recipe [ARGS] `
 
-> rt-file or recipe: Can be a RT recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip or zip otherwise will try to read the file as a recipe.
+ rt-file or recipe: Can be a RT recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip or zip otherwise will try to read the file as a recipe.
 
 > ARGS: argument that can be accesed from built-in array "args".
 
@@ -27,23 +28,15 @@ When calling RT with and .rt, .tar.gz or .zip file as argument it will extract t
 When packing it has to be included a file named _install_ that will contain the recipe to install the recipe.
 
 ### Features:
-* Add / ignore paths, files and extensions
-* root dir and target_dir 
+* add / ignore paths, files and extensions
+* root_dir and target_dir 
 * '>' Run console command
-* Using of recipe coomand arguments
+* Using of recipe coomand arguments with **args** keyword
 * OS check (TODO: does not make sense if there is no conditionals)
-* read file (TODO)
-* condiiotnal checks (TODO)
-* variable declaratinos (TODO)
 * '$()' use of environment variables
 * pack builds, check dependencies and install packages
-* print messages (print "msg")
-* concact print messages by using spaces (print "msg" "msg2")
-* git and svn native support 
-
-### Config File:
-* Bind compiler tools (TODO)
-* create aliases (TODO)
+* print messages
+* git and svn native support
 
 ### Instructions to create a package:
 
@@ -64,33 +57,32 @@ To create a package the order below must be followed:
 NOTE: Between steps can be other instructions like create_file, or invoke a script
 
 ## Syntax
-`root_dir _path_ as root_dir_in_path` 
+`root_dir PATH [as ROOT_DIR_IN_PACKAGE]*` 
 
- > Indicates the root directory (*\_path\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root. The root_dir_in_path indicates the path in the package where stating to include the files, if not used, the files will be inserted exacly as the root_dir indicates.
+ > Indicates the root directory (*\PATH\_*) where start to walk. Can be changed at any point of the recipe. Instructions are related to this root. The ROOT_DIR_IN_PACKAGE indicates the path in the package where stating to include the files, if not used, the files will be inserted exacly as the root_dir indicates.
  
-`target_dir _path_` 
+`target_dir PATH` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
-`add [_pattern_] [as _path_]*` 
+`add PATTERN [as PATH]*` 
 
 > Add a pattern into the package. If used [as path], insertes the pattern inside the _path_ indicated.
 
-`ignore [_pattern_] from [_path_]*`
+`ignore PATTERN [from PATH]*`
 
-> Ignores the pattern from being inserted in the package. The [from path] is optional, if used goes to the ignore applies to the _path_ indicated. if not used the default path is the root_dir.
+> Ignores the pattern from being inserted in the package. The [from path] is optional, if used goes to the ignore applies to the PATH indicated. if not used the default path is the **root_dir**.
 
-`pack _filename_`
+`pack FILENAME`
 
-> Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.
+> Starts packing into **FILENAME** all the files and folders according the instructions given before this call.
 
-`print "_str_" ...`
+`print "STR" ["STR2" ...]*`
 
-> Prints out the *\_str\_*
-> To concatenate strings uses spaces. 
+> Prints out the **STR**. To concatenate strings uses spaces. 
 
  `args`
 
-> the "args" keyword contains the value of the arguments being the first position the first argument, not the name of the binary.
+> The **args** keyword contains the value of the arguments being the first position the first argument, not the name of the binary.
 
  `$(ENV)`
 
