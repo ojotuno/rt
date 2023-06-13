@@ -26,24 +26,26 @@ def parseLine(line, lineNum):
         pass
     else:
         keyword = tokens[0]
-        if keyword == kw.add:
+        if keyword == kw.ADD:
             parse_add(tokens, lineNum)
-        elif keyword == kw.ignore:
+        elif keyword == kw.IGNORE:
             parse_ignore(tokens, lineNum)
-        elif keyword == kw.root_dir:
+        elif keyword == kw.ROOT_DIR:
             parse_root_dir(tokens, lineNum)
-        elif keyword == kw.target_dir:
+        elif keyword == kw.TARGET_DIR:
             parse_target_dir(tokens, lineNum)
-        elif keyword == kw.pack:
+        elif keyword == kw.PACK:
             parse_pack(tokens, lineNum)
-        elif keyword == kw.run_cmd:
+        elif keyword == kw.RUN_CMD:
             parse_run_cmd(tokens)
-        elif keyword == kw.print:
+        elif keyword == kw.PRINT:
             parse_print(tokens)
-        elif keyword == kw.git:
+        elif keyword == kw.GIT:
             parse_git(tokens, lineNum)
-        elif keyword == kw.svn:
+        elif keyword == kw.SVN:
             parse_svn(tokens, lineNum)
+        elif keyword == kw.PACK:
+            parse_pack(tokens, lineNum)
         else:
             msg.syntax_error(lineNum, "Keyword not recognised")
 
@@ -52,7 +54,7 @@ def parseLine(line, lineNum):
 def parse_pack(tokens, lineNum):
     if msg.g_error == False:
         if len(tokens) == 2:
-            pf.pack(tokens, lineNum)
+            pf.pack(tokens[1], lineNum)
         else:
             msg.syntax_error(lineNum, "pack only gets one argument")
 
@@ -99,22 +101,22 @@ def parse_ignore(tokens, lineNum):
     else:
         return msg.syntax_error(lineNum, "The syntax of ignore isntruciton is: ignore PATH [from PATH]* ")
 
-def parse_root_dir(tokens):
+def parse_root_dir(tokens, lineNum):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            pf.set_root_dir(utils.resolve(tokens[1]))  # root_dir value
+            pf.set_root_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
         else:
-            msg.syntax_error("root_dir cannot conatins wildcards(*) in the path")
+            msg.syntax_error(lineNum, "root_dir cannot conatins wildcards(*) in the path")
     else:
-        msg.syntax_error("root_dir only accepts one value")
+        msg.syntax_error(lineNum, "root_dir only accepts one value")
 
 
-def parse_target_dir(tokens):
+def parse_target_dir(tokens, lineNum):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            pf.set_target_dir(utils.resolve(tokens[1]))  # root_dir value
+            pf.set_target_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
         else:
-            msg.syntax_error("target_dir cannot conatins wildcards (*) in the path")
+            msg.syntax_error(lineNum, "target_dir cannot conatins wildcards (*) in the path")
     else:
-        msg.syntax_error("target_dir only accepts one value")
+        msg.syntax_error(lineNum, "target_dir only accepts one value")
 

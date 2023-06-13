@@ -1,16 +1,16 @@
 import globals as g
-import fileparser
+import parser
 import os
 import messages as msg
 import utils
-import core_funcs as f
+import parserfuncs as pf
 
 def process_rtfile(rtFile, installation):
     if True == installation:
         msg.info("Processing installation recipe..")
     else:
         msg.info("Processing recipe...")
-    fileparser.parse(rtFile)
+    parser.parse(rtFile)
 
 def run_installer(src, dest, ext):
     # 1.decompres in dest or current dir
@@ -23,9 +23,9 @@ def run_installer(src, dest, ext):
 
     # 3. unpack into dir
     if ext in [".rt", ".tar.gz"]:
-        f.extract_TAR(src, dir)
+        pf.extract_TAR(src, dir)
     else:
-        f.extract_ZIP(src, dir) #TODO: not implemented yet
+        pf.extract_ZIP(src, dir) #TODO: not implemented yet
 
     install_foudn = False
     install_path = ""

@@ -4,19 +4,30 @@ import subprocess
 import tarfile
 import utils
 import sys
+import glob
+import os
 
 kw = g.Keywords()
 
 def tokenize(line, lineNum, separator=" "):
     tokens = []
     str = ""
+    quotes = False
     for char in line:
-        if char == kw.comment:
+        if char == kw.COMMENT:
             return tokens
         elif char == separator:
-            tokens.append(utils.resolve(str, lineNum))
-            str = ""
+            if not quotes:
+                tokens.append(utils.resolve(str, lineNum))
+                str = ""
+            else:
+                str += char # add space as part of the token because is in a quoted string
         else:
+            if char == '"':
+                if quotes:
+                    quotes = False
+                else:
+                    quotes = True
             if char != "\n":
                 str += char
     
@@ -51,11 +62,25 @@ def add_arguments():
 
 
 # pack file following the instructions
-def pack(filename):
+def pack(filename, lineNum):
+    msg.info("Generating " + filename + "...")
 
+    if (g.target_dir == ""):
+        msg.info("target_dir not defined. The default target_dir is working directoy")
+        g.target_dir = os.getcwd()
+
+    if g.root_dir == "":
+        msg.info("root_dir is empty. Processing relative paths from working directory")
+
+    for i in g.instructions:
+        print("Action: " + str(i.action))
+        print("Data: ")
+        print(glob.glob(i.data, recursive=True))
+        print("as_from: " + i.from_as)
+        print("-----------------------")
+        
     # clean data for the new pack
     g.instructions.clear
-
 
 def run_cmd(command):
     try:

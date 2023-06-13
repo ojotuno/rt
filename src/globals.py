@@ -15,14 +15,14 @@ class Instruction:
     data = "" # first argument = path, pattern, file or extension
     from_as = "" # argument 2. empty = root_dir
 
-#dict instructions {Instructions}
-instructions = {}
+#list of instructions {Instructions}
+instructions = []
 
 # recepie arguments <name, value>
 arguments = []
 
 # root dir -> pair (root_dir, path_in_package)
-root_dir = None
+root_dir = ""
 
 # target dir
 target_dir = ""

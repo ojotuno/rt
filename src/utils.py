@@ -38,23 +38,26 @@ def resolve_env_vars(path, lineNum):
     pattern = r"\$\((\w+)\)"
     matches = re.findall(pattern, path)
 
-    for match in matches:
-        env_variable = match
-        try:
-            env_value = env.get(env_variable)
-            if env_value:
-                path = path.replace(f"$({env_variable})", env_value)
-            else:
-                msg.error(env_variable + " environment variable not found", lineNum)
-            return path
-        except:
-            msg.error("Environment variable in line " + env_variable + " does not exists", lineNum)
-            exit()
+    if len(matches) == 0:
+        msg.syntax_error(lineNum, "Environment variable not well formed")
+        return path
+    else:
+        for match in matches:
+            env_variable = match
+            try:
+                env_value = env.get(env_variable)
+                if env_value:
+                    path = path.replace(f"$({env_variable})", env_value)
+                else:
+                    msg.error(env_variable + " environment variable not found", lineNum)
+                return path
+            except:
+                msg.error("Environment variable in line " + env_variable + " does not exists", lineNum)
 
 def resolve_args(argsStr, lineNum):
-    pattern = r'args\[(\d+)\]'
+    pattern = r"args\[(\d+)\]"
     match = re.search(pattern, argsStr)
-    if match:
+    if match is not None:
         index = int(match.group(1))             
         if len(g.arguments) > index:
             return g.arguments[index]
