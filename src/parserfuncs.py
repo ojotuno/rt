@@ -4,7 +4,6 @@ import subprocess
 import tarfile
 import utils
 import sys
-import glob
 
 kw = g.Keywords()
 
@@ -27,64 +26,35 @@ def tokenize(line, lineNum, separator=" "):
     return tokens
 
 
-# add class Path
-def add_path(srcPath, pathInsidePckg):
-    g.paths2Add.append((srcPath, pathInsidePckg))
+# append add instruction to the list
+def append_instruction(action, data, from_as_data = ""):
+    i = g.Instruction(action, data, from_as_data)
+    g.instructions.append(i)
 
-
-# add path into dict
-def add_file(file, newPathInPckg):
-    g.files2Add[file] = newPathInPckg
-
-
-def add_ext(path, ext, recursive):
-    if path not in g.ext2Add:
-        g.ext2Add[path] = {}
-    g.ext2Add[path][ext] = recursive  # create key entry
-
-
-def ignore_path(path):
-    g.paths2Ignore.append(path)
-
-
-def ignore_file(file):
-    g.files2ignore.append(file)
-
-
-def ignore_ext(ext):
-    g.ext2ignore.append(ext)
-
-
+# set root_dir
 def set_root_dir(value):
     g.root_dir = value
 
-
+#set targer_dir
 def set_target_dir(value):
     g.target_dir = value
 
-
+#print functions
 def print_str(str):
     msg.print_recipe_msg(str)
 
-
+# get arguments from command line
 def add_arguments():
     for i, arg in enumerate(sys.argv):
         if i > 0: # discard rt name
             g.arguments.append(arg)
-    
-
-def add_alias(alias, value):
-    g.aliases[alias] = value
 
 
+# pack file following the instructions
 def pack(filename):
-    # una instruccion de add o ignore va a mirar si ya existe ese path sobre ese fichero, path o ext
-    # y si existe, cambia su fucnion a la ultima instruccion puesta.
-    # Si una instruccion es sobre un subdirectorio de un path ya existente se anade y tiene prioridad sobre una accion recursiva,
-    #es decir, si se ha puesto ignore_ext .
 
     # clean data for the new pack
-    g.instrcutions.clear
+    g.instructions.clear
 
 
 def run_cmd(command):

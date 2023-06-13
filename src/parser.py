@@ -1,6 +1,6 @@
 import os
 import globals as g
-import core_funcs as cf
+import parserfuncs as pf
 import messages as msg
 import utils
 
@@ -20,7 +20,7 @@ def parse(filename):
         msg.error(filename + " not found.")
 
 def parseLine(line, lineNum):
-    tokens = cf.tokenize(line, lineNum)
+    tokens = pf.tokenize(line, lineNum)
     nTokens = len(tokens)
     if nTokens == 0:
         pass
@@ -52,57 +52,59 @@ def parseLine(line, lineNum):
 def parse_pack(tokens, lineNum):
     if msg.g_error == False:
         if len(tokens) == 2:
-            cf.pack(tokens, lineNum)
+            pf.pack(tokens, lineNum)
         else:
             msg.syntax_error(lineNum, "pack only gets one argument")
 
 def parse_print(tokens):
     if msg.g_error == False:
         message = utils.concat_tokens(tokens[1:])
-        cf.print_str(message)
+        pf.print_str(message)
 
 
 def parse_git(tokens):
     if msg.g_error == False:
         command = utils.concat_tokens(tokens)
-        cf.run_cmd(command)
+        pf.run_cmd(command)
 
 
 def parse_svn(tokens):
     if msg.g_error == False:
         command = utils.concat_tokens(tokens)
-        cf.run_cmd(command)
+        pf.run_cmd(command)
 
 
 def parse_run_cmd(tokens):
     if msg.g_error == False:
         command = utils.concat_tokens(tokens[1:])
-        cf.run_cmd(command)
+        pf.run_cmd(command)
 
 
 ###################### Instructions ######################
 def parse_add(tokens, lineNum):
     numTokens = len(tokens)
     if numTokens == 2:
-        f.add_path(tokens[1], "")
-    elif numTokens == 3:
-        f.add_path(tokens[1], tokens[2])
+        pf.append_instruction(g.action_t.add, tokens[1])
+    elif numTokens == 4 and tokens[2] == kw.AS:
+        pf.append_instruction(g.action_t.add, tokens[1], tokens[3])
     else:
-        return msg.syntax_error(lineNum, "add_path takes 2 o 3 arguments")
+        return msg.syntax_error(lineNum, "The syntax of add isntruciton is: add PATH [as PATH]* ")
 
 def parse_ignore(tokens, lineNum):
     numTokens = len(tokens)
     if numTokens == 2:
-        f.ignore_file(tokens[1])
+        pf.append_instruction(g.action_t.ignore, tokens[1])
+    elif numTokens == 4 and tokens[2] == kw.FROM:
+        pf.append_instruction(g.action_t.ignore, tokens[1], tokens[3])
     else:
-        return msg.syntax_error(lineNum, "ignore_path takes just 2 arguments")
+        return msg.syntax_error(lineNum, "The syntax of ignore isntruciton is: ignore PATH [from PATH]* ")
 
 def parse_root_dir(tokens):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            f.set_root_dir(utils.resolve(tokens[1]))  # root_dir value
+            pf.set_root_dir(utils.resolve(tokens[1]))  # root_dir value
         else:
-            msg.syntax_error("root_dir cannot conatins * in the path")
+            msg.syntax_error("root_dir cannot conatins wildcards(*) in the path")
     else:
         msg.syntax_error("root_dir only accepts one value")
 
@@ -110,15 +112,9 @@ def parse_root_dir(tokens):
 def parse_target_dir(tokens):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            f.set_target_dir(utils.resolve(tokens[1]))  # root_dir value
+            pf.set_target_dir(utils.resolve(tokens[1]))  # root_dir value
         else:
-            msg.syntax_error("target_dir cannot conatins * in the path")
+            msg.syntax_error("target_dir cannot conatins wildcards (*) in the path")
     else:
         msg.syntax_error("target_dir only accepts one value")
-
-
-def parse_aliases(tokens, lineNum):
-    # check if alias
-    # else syntax error
-    msg.syntax_error(lineNum, "parse_aliases " + utils.concat_tokens(tokens))
 

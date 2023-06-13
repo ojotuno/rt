@@ -64,11 +64,11 @@ NOTE: Between steps can be other instructions like create_file, or invoke a scri
 `target_dir PATH` 
  > Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.
 
-`add PATTERN [as PATH]*` 
+`add PATH [as PATH]*` 
 
 > Add a pattern into the package. If used [as path], insertes the pattern inside the _path_ indicated.
 
-`ignore PATTERN [from PATH]*`
+`ignore PATH [from PATH]*`
 
 > Ignores the pattern from being inserted in the package. The [from path] is optional, if used goes to the ignore applies to the PATH indicated. if not used the default path is the **root_dir**.
 
