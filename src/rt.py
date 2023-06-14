@@ -33,13 +33,16 @@ if __name__ == "__main__":
   if nargs == 1:
     info.show_info()
   elif nargs == 3 and sys.argv[1] == "-url":
-    filename = urlget.download_file(sys.argv[2])
-    msg.append_ok()
-    run_rt(filename)
-    if os.path.exists(filename):
-      os.remove(filename)
-    else:
-      msg.error("Cannot remove temporary file", 0)
+    try:
+      filename = urlget.download_file(sys.argv[2])
+      msg.append_ok()
+      run_rt(filename)
+      if os.path.exists(filename):
+        os.remove(filename)
+      else:
+        msg.error("Cannot remove temporary file", 0)
+    except:
+        msg.error("Unkown URl type")
   else:
     run_rt(sys.argv[1])
   

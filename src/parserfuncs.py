@@ -60,25 +60,43 @@ def add_arguments():
         if i > 0: # discard rt name
             g.arguments.append(arg)
 
-
-# pack file following the instructions
 def pack(filename, lineNum):
-    msg.info("Generating " + filename + "...")
-
+    # pack file following the instructions
+    ########################################
     if (g.target_dir == ""):
         msg.info("target_dir not defined. The default target_dir is working directoy")
         g.target_dir = os.getcwd()
 
     if g.root_dir == "":
         msg.info("root_dir is empty. Processing relative paths from working directory")
+    else:
+        if os.path.isdir(g.root_dir):
+            os.chdir(g.root_dir) #set working directoy
+        else:
+            msg.error("root_dir is set but it is not a valid directoy. Aborted!")        
 
-    for i in g.instructions:
-        print("Action: " + str(i.action))
-        print("Data: ")
-        print(glob.glob(i.data, recursive=True))
-        print("as_from: " + i.from_as)
-        print("-----------------------")
+    if msg.g_error == False:
+        msg.info("Generating " + filename + "...",)
+        for i in g.instructions:
+            if "*" in i.data: #using wildcards
+                if not os.path.isabs(i.data): ## if relative
+                        i.data = os.path.abspath(i.data)
+                
+                g.packfiles += glob.glob(i.data, recursive=True) ## add files from wildcards
+            else:
+                if os.path.isdir(i.data): ## if directory
+                    if not os.path.isabs(i.data): ## if relative
+                        i.data = os.path.abspath(i.data)
+                
+                    for currentDir, subdirs, files in os.walk(i.data):
+                        for f in files:
+                            g.packfiles.append(currentDir + "/" + f) ## add files from directories with no wildcards
+                else: # add just a file
+                    g.packfiles.append(i.data)
         
+        print("Files to pack")
+        print(g.packfiles)
+
     # clean data for the new pack
     g.instructions.clear
 
@@ -111,5 +129,3 @@ def compress_TAR(tar_file, files, dest):
 
 def extract_ZIP(zipfile):
     msg.error("ZIP files not implemented yet")
-
-    

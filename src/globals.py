@@ -18,6 +18,9 @@ class Instruction:
 #list of instructions {Instructions}
 instructions = []
 
+# list of files to pack
+packfiles = []
+
 # recepie arguments <name, value>
 arguments = []
 
