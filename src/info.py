@@ -20,8 +20,13 @@ def show_logo():
 
 def show_info():
   show_logo()
- 
+
   print(colors.off + " ")
+  print(colors.off + "Usage:")
+  print(colors.off + "---------- ")
+  print(colors.off + "rt RECIPE_FILE ")
+  print(colors.off + "rt RTFILE.[rt, tar.gz, zip] [DEST]* ")
+  print(colors.off + "---------- ")
   print(colors.off + "Every line has to be formed by " + colors.blue + "keyword " + colors.yellow + "argument")
   print(colors.off + "Keywords: root_dir, target_dir, add, ignore, print, args, git, svn")
   print(colors.off + "Arguments: path/patterns/file/extension/evinronment variable with inside of the expresion $() ")

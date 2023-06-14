@@ -1,5 +1,5 @@
 import globals as g
-import parser
+import rtparser
 import os
 import messages as msg
 import utils
@@ -10,7 +10,7 @@ def process_rtfile(rtFile, installation):
         msg.info("Processing installation recipe..")
     else:
         msg.info("Processing recipe...")
-    parser.parse(rtFile)
+    rtparser.parse(rtFile)
 
 def run_installer(src, dest, ext):
     # 1.decompres in dest or current dir

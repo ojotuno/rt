@@ -88,7 +88,6 @@ def run_cmd(command):
     except subprocess.CalledProcessError as e:
         msg.info("Returned code " + str(e.returncode))
 
-
 # get file esxtension
 def get_file_ext(file):
     dot_index = file.find(".")
