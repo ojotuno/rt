@@ -113,7 +113,7 @@ ignore ./scripts
 ignore .mp3 from ./res
 
 #ignore .log files from ./bin dir and all the subdirectories
-ignore .log from ./bin*
+
 
 #add the content of config dir inside "release" folder
 add /tmp/config as /relase/config

@@ -47,7 +47,7 @@ def parseLine(line, lineNum):
         elif keyword == kw.PACK:
             parse_pack(tokens, lineNum)
         else:
-            msg.syntax_error(lineNum, "Keyword not recognised")
+            msg.syntax_error("Keyword not recognised", lineNum)
 
 
 ######################## Actions ########################
@@ -56,7 +56,7 @@ def parse_pack(tokens, lineNum):
         if len(tokens) == 2:
             pf.pack(tokens[1], lineNum)
         else:
-            msg.syntax_error(lineNum, "pack only gets one argument")
+            msg.syntax_error("pack only gets one argument", lineNum)
 
 def parse_print(tokens):
     if msg.g_error == False:
@@ -86,29 +86,33 @@ def parse_run_cmd(tokens):
 def parse_add(tokens, lineNum):
     numTokens = len(tokens)
     if numTokens == 2:
-        pf.append_instruction(g.action_t.add, tokens[1])
+        if utils.check_add_statement(tokens[1], "", lineNum):
+            pf.append_instruction(g.action_t.add, tokens[1])
     elif numTokens == 4 and tokens[2] == kw.AS:
-        pf.append_instruction(g.action_t.add, tokens[1], tokens[3])
+        if utils.check_add_statement(tokens[1], tokens[3], lineNum):
+            pf.append_instruction(g.action_t.add, tokens[1], tokens[3])
     else:
-        return msg.syntax_error(lineNum, "The syntax of add isntruciton is: add PATH [as PATH]* ")
+        return msg.syntax_error("The syntax of add isntruciton is: add PATH [as PATH]* ",lineNum)
 
 def parse_ignore(tokens, lineNum):
     numTokens = len(tokens)
     if numTokens == 2:
-        pf.append_instruction(g.action_t.ignore, tokens[1])
+        if utils.check_ignore_statement(tokens[1], "", lineNum):
+            pf.append_instruction(g.action_t.ignore, tokens[1])
     elif numTokens == 4 and tokens[2] == kw.FROM:
-        pf.append_instruction(g.action_t.ignore, tokens[1], tokens[3])
+        if utils.check_ignore_statement(tokens[1], tokens[3], lineNum):
+            pf.append_instruction(g.action_t.ignore, tokens[1], tokens[3])
     else:
-        return msg.syntax_error(lineNum, "The syntax of ignore isntruciton is: ignore PATH [from PATH]* ")
+        return msg.syntax_error("The syntax of ignore isntruciton is: ignore PATH [from PATH]* ", lineNum)
 
 def parse_root_dir(tokens, lineNum):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
             pf.set_root_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
         else:
-            msg.syntax_error(lineNum, "root_dir cannot conatins wildcards(*) in the path")
+            msg.syntax_error("root_dir cannot conatins wildcards(*) in the path", lineNum)
     else:
-        msg.syntax_error(lineNum, "root_dir only accepts one value")
+        msg.syntax_error("root_dir only accepts one value", lineNum, )
 
 
 def parse_target_dir(tokens, lineNum):
@@ -116,7 +120,7 @@ def parse_target_dir(tokens, lineNum):
         if "*" not in tokens[1]:
             pf.set_target_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
         else:
-            msg.syntax_error(lineNum, "target_dir cannot conatins wildcards (*) in the path")
+            msg.syntax_error("target_dir cannot conatins wildcards (*) in the path", lineNum)
     else:
-        msg.syntax_error(lineNum, "target_dir only accepts one value")
+        msg.syntax_error("target_dir only accepts one value", lineNum)
 

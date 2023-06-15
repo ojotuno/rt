@@ -7,4 +7,9 @@ mkdir build
 mkdir bin
 
 #if pyinstaller is not recognised -> run pip install pyinstaller for the pip version wanted
-pyinstaller ./src/rt.py --distpath ./bin --workpath ./build --paths ./src  --onefile
+pyinstaller $HOME/dev/rt/src/rt.py --distpath ./bin --workpath ./build --paths $HOME/dev/rt/src  --onefile
+
+echo "Installing RT into /opt/rt ..."
+sudo cp -v ./bin/rt /usr/bin
+
+

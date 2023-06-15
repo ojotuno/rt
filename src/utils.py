@@ -2,6 +2,7 @@ import env_var as env
 import re  # regular expresions
 import messages as msg
 import globals as g
+import os.path as p
 
 def getFullExt(str):
     index = str.find(".")
@@ -39,7 +40,7 @@ def resolve_env_vars(path, lineNum):
     matches = re.findall(pattern, path)
 
     if len(matches) == 0:
-        msg.syntax_error(lineNum, "Environment variable not well formed")
+        msg.syntax_error("Environment variable not well formed", lineNum)
         return path
     else:
         for match in matches:
@@ -71,3 +72,48 @@ def split_path_and_ext(token):
     path = token[: extDot - 1]
     ext = token[extDot:]
     return path, ext
+
+import re
+
+def isdir(path):
+    begin = ["./", "/", "//", "../"]
+    for item in begin:
+        if item in path:
+            return True
+    return False
+
+
+
+def check_add_statement(val1, val2, lineNum):
+    # val1 has to be a file or a directory
+    # val2 has to be a file or a absolute path
+    # if (isdir(val1)):
+    #     # if len(val2) > 0 :
+    #     #     if not p.isabs(val2):
+    #     #         msg.syntax_error("ADD value is directory but AS value is a file",lineNum)
+    #     #         return False
+    #     #     elif val2[0] is not "/": #is relative
+    #     #         msg.syntax_error("AS value cannot be a relative directory", lineNum)
+    #     #         return False
+    #     return True
+    # else: 
+    #     if len(val2) > 0 and isdir(val2):
+    #         msg.syntax_error("Add value is a file but AS value is a directory", lineNum)
+    #         return False
+        
+    return True
+
+def check_ignore_statement(val1, val2, lineNum):
+    # val1 has to be file or directory
+    # val2 has to be always a valid path
+    if len(val2) > 0 and not isdir(val2):
+            msg.syntax_error("From value has to be a valid directory", lineNum)
+            return False
+    return True
+
+def remove_duplicates():
+    for i in range(len(g.packfiles)):
+        try:
+            g.packfiles[i][0] = list(dict.fromkeys(g.packfiles[i][0]))
+        except:
+            pass

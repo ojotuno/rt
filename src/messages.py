@@ -10,11 +10,13 @@ g_counter = 0
 def check_errors():
     return g_error
 
-
 def info(msg, endl="\n"):
     print(rt + msg, end=endl)
     sys.stdout.flush()
 
+def warning(msg, endl="\n"):
+    print(c.darkyellow + rt + msg + c.off, end=endl)
+    sys.stdout.flush()
 
 def done():
     print(rt + c.green + "Done!" + c.off)
@@ -48,7 +50,7 @@ def error(msg, lineNun = -1):
     sys.stdout.flush()
 
 
-def syntax_error(lineNun, msg):
+def syntax_error(msg, lineNun,):
     print(rt + c.red + "Syntax error in line " + str(lineNun) + ": " + msg + c.off)
     global g_error
     global g_counter
