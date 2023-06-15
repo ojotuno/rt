@@ -110,10 +110,3 @@ def check_ignore_statement(val1, val2, lineNum):
             msg.syntax_error("From value has to be a valid directory", lineNum)
             return False
     return True
-
-def remove_duplicates():
-    for i in range(len(g.packfiles)):
-        try:
-            g.packfiles[i][0] = list(dict.fromkeys(g.packfiles[i][0]))
-        except:
-            pass

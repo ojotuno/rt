@@ -89,12 +89,20 @@ def pack(filename, lineNum):
             filesPerInstruc = []
             ## process instrcution
             if "*" in i.data: #using wildcards
+                root = i.data[:i.data.find('*')]
                 if i.action == g.action_t.ignore:
                     i.data = i.from_as + "/" + i.data
                 try:
-                    filesPerInstruc = glob.glob(i.data, recursive=True) ## add files from wildcards
+                    files2Add = glob.glob(i.data, recursive=True) ## add files from wildcards
+                    files2Ignore = []
+                    if i.from_as[len(i.from_as) - 1] is not "/":
+                        i.from_as.append("/")
+                    for f in files2Add:
+                        files2Ignore.append(f.replace(root, i.from_as))
+
+                    filesPerInstruc.append([files2Add, files2Ignore])
                 except:
-                    msg.error(i.data + "Cannot be resolved")
+                    msg.error(i.data + " cannot be resolved")
             else:
                 if os.path.isdir(i.data): ## if directory
                     for currentDir, subdirs, files in os.walk(i.data):
@@ -102,8 +110,10 @@ def pack(filename, lineNum):
                             filesPerInstruc.append(currentDir + "/" + f) ## add files from directories with no wildcards
                 else: # add just a file
                     if len(i.from_as) == 0:
-                        filesPerInstruc.append(i.data)
-
+                        filesPerInstruc.append([i.data, ""])
+                    else:
+                        i.from_as = i.from_as[:i.from_as.rfind("/")+1] + i.data
+                        filesPerInstruc.append([i.data, i.from_as])
             ## ADD files  
             if (i.action == g.action_t.add): 
                 g.packfiles.append([filesPerInstruc, i.from_as])
@@ -115,7 +125,6 @@ def pack(filename, lineNum):
                     filesWithoutIgnored = (list(files2Add.difference(files2ignore)), "")
                     g.packfiles[i][0] = filesWithoutIgnored
             
-            utils.remove_duplicates()
             print(filesPerInstruc)
         
         print(g.packfiles)

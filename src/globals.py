@@ -18,7 +18,7 @@ class Instruction:
 #list of instructions {Instructions}
 instructions = []
 
-# list of lists [src, dest] to follow to pack
+# list of lists [[src..], [dest..]] to follow to pack
 packfiles = []
 
 # recepie arguments <name, value>
