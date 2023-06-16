@@ -6,19 +6,21 @@ class action_t(Enum):
     ignore = 1
 
 class Instruction:
-    def __init__(self, action, data, from_as):
+    def __init__(self, action, data, from_as, lineNum):
         self.action = action
         self.data = data
         self.from_as = from_as
+        self.line = lineNum
 
     action: action_t.none
     data = "" # first argument = path, pattern, file or extension
     from_as = "" # argument 2. empty = root_dir
+    line = -1
 
 #list of instructions {Instructions}
 instructions = []
 
-# list of lists [[src..], [dest..]] to follow to pack
+# list of lists [[[src..], [dest..]], ] to follow to pack
 packfiles = []
 
 # recepie arguments <name, value>
