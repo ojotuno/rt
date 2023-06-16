@@ -64,14 +64,14 @@ def pack(filename, lineNum):
     # pack file following the instructions
     ########################################
     if (g.target_dir == ""):
-        msg.info("target_dir not defined. The default target_dir is working directoy")
+        msg.warning("target_dir not defined. The default target_dir is working directoy")
         g.target_dir = os.getcwd()
     else:
          if not os.path.isdir(g.root_dir):
             msg.error("target_dir is set but it is not a valid directoy. Aborted!")   
 
     if g.root_dir == "":
-        msg.info("root_dir is empty. Processing relative paths from working directory")
+        msg.warning("root_dir is empty. Processing relative paths from working directory")
     else:
         if os.path.isdir(g.root_dir):
             os.chdir(g.root_dir) #set working directoy
@@ -108,22 +108,22 @@ def pack(filename, lineNum):
                 elif os.path.isfile(searchPath): # add just a file
                     if len(i.from_as) == 0:
                         if i.action == g.action_t.ignore:
-                            filesPerInstruc.append(searchPath)
+                            filesPerInstruc = searchPath
                         else:
-                            filesPerInstruc.append([searchPath, ""])
+                            filesPerInstruc = [[searchPath], [searchPath.replace(os.getcwd(), "")]]
                     else: # there is from/as
                         if i.action == g.action_t.ignore:
-                            filesPerInstruc.append(i.from_as + searchPath)
+                            filesPerInstruc = i.from_as + searchPath
                         elif i.from_as[len(i.from_as)-1] == "/": ## if add and as
                             i.from_as = i.from_as + searchPath
-                            filesPerInstruc.append([searchPath, i.from_as])
+                            filesPerInstruc = [[searchPath], [i.from_as]]
                 else:
                     msg.warning("File " + searchPath + " not found in line " + str(i.line) + ". Step skipped!")
                     pass                
 
             ## ADD files  
             if (i.action == g.action_t.add): 
-                if len(filesPerInstruc) and type(filesPerInstruc[0]) is str: #directories -> get dest list
+                if len(filesPerInstruc) > 0 and type(filesPerInstruc[0]) is str: #directories -> get dest list
                     root = searchPath[:searchPath.find('*')] # get path until first occurence of * (if so)
 
                     if len(i.from_as) > 0 and (i.from_as[len(i.from_as) - 1] is not "/"): # if as value dont ends in /, append it
@@ -138,7 +138,7 @@ def pack(filename, lineNum):
 
                     if len(filesPerInstruc) > 0:
                         g.packfiles.append([filesPerInstruc, destFiles])
-                else: # a file -> insert in global list directly
+                else: # it is a file -> insert in global list directly
                     if len(filesPerInstruc) > 0:
                         g.packfiles.append(filesPerInstruc)
 
@@ -151,8 +151,6 @@ def pack(filename, lineNum):
                                 if g.packfiles[i][0][k] == filesPerInstruc[j]:
                                     del g.packfiles[i][0][k] #delete from src list
                                     del g.packfiles[i][1][k] #delete froms dest list (path in pack file)
-        print("Result:")
-        print(g.packfiles)
     else:
         msg.error("Errors found, skipping pack")
 
@@ -181,11 +179,27 @@ def extract_TAR(tar_file, dest):
     msg.append_ok()
     tarball.close()
 
-
 def create_targz(filename):
-   ## tarball = tarfile.open(g.target_dir + "/" + filename, "r:gz")
-    msg.info('Creating package "' + filename + '"...', "")
-    #tarball.add()
+    msg.info('Creating package "' + filename + '"...')
+    targzfile = g.target_dir + "/" + filename
+    if (os.path.isfile(targzfile)):
+        os.remove(targzfile)
+    tarball = tarfile.open(targzfile, "w:gz")
+    numFiles = 0
+    for fileList in g.packfiles:
+        for i in range(len(fileList[0])):
+            numFiles +=1
+
+    currentNumFile = 1
+    for fileList in g.packfiles:
+        for i in range(len(fileList[0])):
+            print("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[1][i])
+            tarball.add(fileList[0][i], fileList[1][i])
+            currentNumFile += 1
+
+    tarball.close()
+    msg.ok()
+
 
 def extract_ZIP(zipfile):
     msg.error("ZIP files not implemented yet")
