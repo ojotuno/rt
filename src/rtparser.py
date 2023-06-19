@@ -66,19 +66,21 @@ def parse_print(tokens):
 
 def parse_git(tokens):
     if msg.g_error == False:
-        command = utils.concat_tokens(tokens)
+        command = utils.create_command(tokens)
         pf.run_cmd(command)
 
 
 def parse_svn(tokens):
     if msg.g_error == False:
-        command = utils.concat_tokens(tokens)
+        command = utils.create_command(tokens)
         pf.run_cmd(command)
 
 
 def parse_run_cmd(tokens):
     if msg.g_error == False:
-        command = utils.concat_tokens(tokens[1:])
+        print(tokens)
+        command = utils.create_command(tokens[1:])
+        print("command: " + command)
         pf.run_cmd(command)
 
 

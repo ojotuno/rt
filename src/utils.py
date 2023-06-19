@@ -24,6 +24,12 @@ def concat_tokens(tokens):
             result += (str.group())[1:-1]
     return result
 
+def create_command(tokens):
+    command = ""
+    for token in tokens:
+        command += token + " "
+    return command
+
 def resolve(str, lineNum):
     value = ""
     if "$" in str:
