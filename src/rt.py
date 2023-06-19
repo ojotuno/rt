@@ -4,7 +4,7 @@ import core
 import utils
 import messages as msg
 import parserfuncs as pf
-import urlget
+import wget
 import os
 
 def run_rt(rtfile):
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     info.show_info()
   elif nargs == 3 and sys.argv[1] == "-url":
     try:
-      filename = urlget.download_file(sys.argv[2])
+      filename = wget.download(sys.argv[2])
       msg.append_ok()
       run_rt(filename)
       if os.path.exists(filename):

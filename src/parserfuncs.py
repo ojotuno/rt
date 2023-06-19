@@ -6,6 +6,7 @@ import utils
 import sys
 import glob
 import os
+import colors
 
 kw = g.Keywords()
 
@@ -180,7 +181,7 @@ def extract_TAR(tar_file, dest):
     tarball.close()
 
 def create_targz(filename):
-    msg.info('Creating package "' + filename + '"...')
+    msg.info(colors.darkmagenta + 'Packing "' + filename + colors.darkmagenta)
     targzfile = g.target_dir + "/" + filename
     if (os.path.isfile(targzfile)):
         os.remove(targzfile)
