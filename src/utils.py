@@ -2,7 +2,6 @@ import env_var as env
 import re  # regular expresions
 import messages as msg
 import globals as g
-import os.path as p
 
 def getFullExt(str):
     index = str.find(".")

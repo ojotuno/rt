@@ -68,16 +68,19 @@ def pack(filename, lineNum):
         msg.warning("target_dir not defined. The default target_dir is working directoy")
         g.target_dir = os.getcwd()
     else:
-         if not os.path.isdir(g.root_dir):
+         if not os.path.isdir(g.target_dir):
             msg.error("target_dir is set but it is not a valid directoy. Aborted!")   
+            msg.warning("target_dir = " + g.target_dir)   
 
     if g.root_dir == "":
         msg.warning("root_dir is empty. Processing relative paths from working directory")
+        g.root_dir = os.getcwd()
     else:
         if os.path.isdir(g.root_dir):
             os.chdir(g.root_dir) #set working directoy
         else:
             msg.error("root_dir is set but it is not a valid directoy. Aborted!")        
+            msg.warning("root_dir = " + g.root_dir)   
 
     if msg.g_error == False:
         for i in g.instructions:
@@ -111,7 +114,7 @@ def pack(filename, lineNum):
                         if i.action == g.action_t.ignore:
                             filesPerInstruc = searchPath
                         else:
-                            filesPerInstruc = [[searchPath], [searchPath.replace(os.getcwd(), "")]]
+                            filesPerInstruc = [[searchPath], [searchPath.replace(g.root_dir, "")]]
                     else: # there is from/as
                         if i.action == g.action_t.ignore:
                             filesPerInstruc = i.from_as + searchPath
@@ -125,7 +128,11 @@ def pack(filename, lineNum):
             ## ADD files  
             if (i.action == g.action_t.add): 
                 if len(filesPerInstruc) > 0 and type(filesPerInstruc[0]) is str: #directories -> get dest list
-                    root = searchPath[:searchPath.find('*')] # get path until first occurence of * (if so)
+                    pos = searchPath.find('*')
+                    if pos > -1:
+                        root = searchPath[:pos] # get path until first occurence of * (if so)
+                    else:
+                        root = searchPath
 
                     if len(i.from_as) > 0 and (i.from_as[len(i.from_as) - 1] is not "/"): # if as value dont ends in /, append it
                         i.from_as += '/'
@@ -133,9 +140,10 @@ def pack(filename, lineNum):
                     destFiles = []
                     for f in filesPerInstruc: # generate files in pack file
                         if len(i.from_as) > 0:
-                            destFiles.append(f.replace(root, i.from_as))
+                            filepath = (f.replace(root, i.from_as)).replace("//", "/") # sanitace path
+                            destFiles.append(filepath)
                         else:
-                            destFiles.append(f.replace(root, "")) #TODO: option of create root dir will be here
+                            destFiles.append(f.replace(g.root_dir, "")) #TODO: option of create root dir will be here
 
                     if len(filesPerInstruc) > 0:
                         g.packfiles.append([filesPerInstruc, destFiles])
@@ -181,7 +189,7 @@ def extract_TAR(tar_file, dest):
     tarball.close()
 
 def create_targz(filename):
-    msg.info(colors.darkmagenta + 'Packing "' + filename + colors.darkmagenta)
+    msg.info(colors.darkmagenta + 'Packing "' + filename + colors.off)
     targzfile = g.target_dir + "/" + filename
     if (os.path.isfile(targzfile)):
         os.remove(targzfile)

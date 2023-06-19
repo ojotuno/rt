@@ -4,10 +4,6 @@ import math
 import urllib.request as urllib
 import urllib.parse as urlparse
 
-
-__version__ = "2.3-beta1"
-
-
 def filename_from_url(url):
     """:return: detected filename or None"""
     fname = os.path.basename(urlparse.urlparse(url).path)
