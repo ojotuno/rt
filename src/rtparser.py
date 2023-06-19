@@ -78,9 +78,7 @@ def parse_svn(tokens):
 
 def parse_run_cmd(tokens):
     if msg.g_error == False:
-        print(tokens)
         command = utils.create_command(tokens[1:])
-        print("command: " + command)
         pf.run_cmd(command)
 
 
