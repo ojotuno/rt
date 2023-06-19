@@ -7,9 +7,9 @@ import parserfuncs as pf
 
 def process_rtfile(rtFile, installation):
     if True == installation:
-        msg.info("Processing installation recipe..")
+        msg.warning("Processing installation recipe..")
     else:
-        msg.info("Processing recipe...")
+        msg.warning("Processing recipe...")
     rtparser.parse(rtFile)
 
 def run_installer(src, dest, ext):
