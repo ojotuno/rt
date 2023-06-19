@@ -118,8 +118,15 @@ def pack(filename, lineNum):
                     else: # there is from/as
                         if i.action == g.action_t.ignore:
                             filesPerInstruc = i.from_as + searchPath
-                        elif i.from_as[len(i.from_as)-1] == "/": ## if add and as
-                            i.from_as = i.from_as + searchPath
+                        else:
+                            if i.from_as[len(i.from_as)-1] == "/": # file added into dir
+                                msg.info(colors.darkblue + searchPath + colors.off + 
+                                        " will be added into " + colors.darkblue + i.from_as + colors.off)
+                                i.from_as = i.from_as + searchPath
+                            else: # file renamed
+                                msg.info(colors.darkblue + searchPath + colors.off + " renamed to " +
+                                        colors.darkblue + i.from_as + colors.off)
+
                             filesPerInstruc = [[searchPath], [i.from_as]]
                 else:
                     msg.warning("File " + searchPath + " not found in line " + str(i.line) + ". Step skipped!")
