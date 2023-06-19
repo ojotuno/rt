@@ -2,7 +2,7 @@ import colors
 
 def show_logo():        
                                                                                                                             
-  print(colors.red +"version 1.0.0")
+  print(colors.red +"version 1.1.0")
   print(colors.green + """
  .----------------.  .----------------. 
 | .--------------. || .--------------. |
