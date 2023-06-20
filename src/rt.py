@@ -7,7 +7,7 @@ import parserfuncs as pf
 import wget
 import os
 
-def run_rt(rtfile):
+def run_rt(rtfile, url=False):
   # add all arguments
   pf.add_arguments()
 
@@ -17,8 +17,10 @@ def run_rt(rtfile):
     core.process_rtfile(rtfile, False) # try to precess install recipe
   else:
     dest = ""
-    if nargs == 3:
+    if nargs == 3 and url == False:
       dest = sys.argv[2]
+    else:
+      dest = "./"
     core.run_installer(rtfile, dest, ext);            
   
   if msg.g_error == False:
@@ -35,14 +37,14 @@ if __name__ == "__main__":
   elif nargs == 3 and sys.argv[1] == "-url":
     try:
       filename = wget.download(sys.argv[2])
-      msg.append_ok()
-      run_rt(filename)
+      run_rt(filename, url=True)
       if os.path.exists(filename):
         os.remove(filename)
       else:
         msg.error("Cannot remove temporary file", 0)
-    except:
-        msg.error("Unkown URl type")
+    except wget.Exception as e:
+        msg.error("Unkown URL type.")
+        msg.error(e)
   else:
     run_rt(sys.argv[1])
   

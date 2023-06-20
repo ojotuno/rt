@@ -3,6 +3,7 @@ import tempfile
 import math
 import urllib.request as urllib
 import urllib.parse as urlparse
+import messages as msg
 
 def filename_from_url(url):
     """:return: detected filename or None"""
@@ -132,13 +133,13 @@ def bar_thermometer(current, total, width=80):
     # number of dots on thermometer scale
     avail_dots = width-2
     shaded_dots = int(math.floor(float(current) / total * avail_dots))
-    return '[' + '.'*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
+    return '|'*shaded_dots + '_'*(avail_dots-shaded_dots)
 
 def bar_adaptive(current, total, width=80):
     """Return progress bar string for given values in one of three
     styles depending on available width:
 
-        [..  ] downloaded / total
+        percent % [.....  ] downloaded / total
         downloaded / total
         [.. ]
 
@@ -282,6 +283,8 @@ def download(url, out=None, bar=bar_adaptive):
         callback = None
 
     (tmpfile, headers) = ThrowOnErrorOpener().retrieve(url, tmpfile, callback)
+    msg.append_ok()
+
     names["header"] = filename_from_headers(headers)
     if os.path.isdir(names["out"]):
         filename = names["header"] or names["url"]
@@ -291,7 +294,8 @@ def download(url, out=None, bar=bar_adaptive):
     # add numeric ' (x)' suffix if filename already exists
     if os.path.exists(filename):
         filename = filename_fix_existing(filename)
-    shutil.move(tmpfile, filename)
+
+    os.rename(tmpfile, filename)
 
     #print headers
     return filename

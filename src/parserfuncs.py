@@ -189,11 +189,14 @@ def get_file_ext(file):
 
 
 def extract_TAR(tar_file, dest):
-    tarball = tarfile.open(tar_file, "r:gz")
-    msg.info('Decompressing package "' + tar_file + '"...', "")
-    tarball.extractall(dest)
-    msg.append_ok()
-    tarball.close()
+    if os.path.isfile(tar_file):
+        tarball = tarfile.open(tar_file, "r:gz")
+        msg.info('Decompressing package "' + tar_file + '"...', "")
+        tarball.extractall(dest)
+        msg.append_ok()
+        tarball.close()
+    else:
+        msg.error("File not found " + tar_file);
 
 def create_targz(filename):
     msg.info(colors.darkmagenta + 'Packing "' + filename + colors.off)
