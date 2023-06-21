@@ -4,8 +4,8 @@ add ../install.sh as install
 
 pack rt.tar.gz
 
-add ../src as src/
-add ../rt as rt
-add ../install.sh as install
+# add ../src as src/
+# add ../rt as rt
+# add ../install.sh as install
 
-pack rt.rt
+# pack rt.rt
