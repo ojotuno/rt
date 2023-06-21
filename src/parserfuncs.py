@@ -141,7 +141,7 @@ def pack(filename, lineNum):
                     else:
                         root = searchPath
 
-                    if len(i.from_as) > 0 and (i.from_as[len(i.from_as) - 1] is not "/"): # if as value dont ends in /, append it
+                    if len(i.from_as) > 0 and (i.from_as[len(i.from_as) - 1] != "/"): # if as value dont ends in /, append it
                         i.from_as += '/'
 
                     destFiles = []
