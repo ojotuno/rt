@@ -1,0 +1,5 @@
+add ../src as src/
+add ../rt as rt
+add ../install.sh as install
+
+pack rt.tar.gz
