@@ -7,7 +7,6 @@ else
     echo "Building omited"
 fi
 
-
 echo "Installing RT into /usr/local/bin"
 sudo mkdir -p /usr/local/src/rt && sudo cp -v ./src/* /usr/local/src/rt/
 sudo cp rt /usr/local/bin/
