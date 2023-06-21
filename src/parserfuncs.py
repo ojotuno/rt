@@ -175,7 +175,8 @@ def pack(filename, lineNum):
         create_targz(filename)
 
     # clean data for the new pack
-    g.instructions.clear()
+    g.instructions = []
+    g.packfiles = []
 
 def run_cmd(command):
     try:
