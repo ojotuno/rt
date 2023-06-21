@@ -147,6 +147,7 @@ def pack(filename, lineNum):
                     destFiles = []
                     for f in filesPerInstruc: # generate files in pack file
                         if len(i.from_as) > 0:
+                            root = f[:f.rfind("/") + 1] # path of the file
                             filepath = (f.replace(root, i.from_as)).replace("//", "/") # sanitace path
                             destFiles.append(filepath)
                         else:
@@ -174,7 +175,8 @@ def pack(filename, lineNum):
         create_targz(filename)
 
     # clean data for the new pack
-    g.instructions.clear()
+    g.instructions = []
+    g.packfiles = []
 
 def run_cmd(command):
     try:
@@ -205,11 +207,13 @@ def create_targz(filename):
         os.remove(targzfile)
     tarball = tarfile.open(targzfile, "w:gz")
     numFiles = 0
+    #calculate num of files
     for fileList in g.packfiles:
         for i in range(len(fileList[0])):
             numFiles +=1
 
     currentNumFile = 1
+    # pack
     for fileList in g.packfiles:
         for i in range(len(fileList[0])):
             print("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[1][i])
