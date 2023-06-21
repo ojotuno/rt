@@ -32,6 +32,11 @@ def append_ok():
     print(c.green + " [OK]" + c.off)
     sys.stdout.flush()
 
+    
+def append_error():
+    print(c.red + " [ERROR]" + c.off)
+    sys.stdout.flush()
+
 
 def ok():
     print(rt + c.green + "[OK]" + c.off)

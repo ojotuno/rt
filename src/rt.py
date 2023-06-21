@@ -35,17 +35,12 @@ if __name__ == "__main__":
   if nargs == 1:
     info.show_info()
   elif nargs == 3 and sys.argv[1] == "-url":
-    try:
-      filename = wget.download(sys.argv[2])
+    filename = wget.download(sys.argv[2])
+    if filename == "":
       run_rt(filename, url=True)
       if os.path.exists(filename):
         os.remove(filename)
       else:
         msg.error("Cannot remove temporary file", 0)
-    except wget.Exception as e:
-        msg.error("Unkown URL type.")
-        msg.error(e)
   else:
     run_rt(sys.argv[1])
-  
- 

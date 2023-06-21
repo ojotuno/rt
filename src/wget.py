@@ -253,7 +253,8 @@ def callback_progress(blocks, block_size, total_size, bar_function):
 
 class ThrowOnErrorOpener(urllib.FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
-        raise Exception("%s: %s" % (errcode, errmsg))
+        print("%s: %s" % (errcode, errmsg))
+        raise Exception
 
 def download(url, out=None, bar=bar_adaptive):
     """High level function, which downloads URL into tmp file in current
@@ -282,23 +283,26 @@ def download(url, out=None, bar=bar_adaptive):
     else:
         callback = None
 
-    (tmpfile, headers) = ThrowOnErrorOpener().retrieve(url, tmpfile, callback)
-    msg.append_ok()
+    try:
+        (tmpfile, headers) = ThrowOnErrorOpener().retrieve(url, tmpfile, callback)
+        msg.append_ok()
 
-    names["header"] = filename_from_headers(headers)
-    if os.path.isdir(names["out"]):
-        filename = names["header"] or names["url"]
-        filename = names["out"] + "/" + filename
-    else:
-        filename = names["out"] or names["header"] or names["url"]
-    # add numeric ' (x)' suffix if filename already exists
-    if os.path.exists(filename):
-        filename = filename_fix_existing(filename)
+        names["header"] = filename_from_headers(headers)
+        if os.path.isdir(names["out"]):
+            filename = names["header"] or names["url"]
+            filename = names["out"] + "/" + filename
+        else:
+            filename = names["out"] or names["header"] or names["url"]
+        # add numeric ' (x)' suffix if filename already exists
+        if os.path.exists(filename):
+            filename = filename_fix_existing(filename)
 
-    os.rename(tmpfile, filename)
-
-    #print headers
-    return filename
+        os.rename(tmpfile, filename)
+        #print headers
+        return filename
+    except:
+        msg.append_error()
+        return ""
 
 r"""
 features that require more tuits for urlretrieve API
