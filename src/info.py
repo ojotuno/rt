@@ -1,8 +1,7 @@
 import colors
+import buildnum
 
-def show_logo():        
-                                                                                                                            
-  print(colors.red +"version 1.1.1")
+def show_logo():                                                                                                                                
   print(colors.green + """
  .----------------.  .----------------. 
 | .--------------. || .--------------. |
@@ -16,8 +15,8 @@ def show_logo():
 | '--------------' || '--------------' |
  '----------------'  '----------------' 
  """)
+  print(colors.red + " Build number: " + buildnum.num + colors.off)
                                                               
-
 def show_info():
   show_logo()
 

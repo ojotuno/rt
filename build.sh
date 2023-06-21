@@ -1,15 +1,11 @@
 #/bib/bash
 
-rm -rf build
-rm -rf bin
+buildnum=`git log --pretty=format:'%h' -n 1`
+echo "num = \""$buildnum"\"" > ./src/buildnum.py
 
-mkdir build
-mkdir bin
-
-#if pyinstaller is not recognised -> run pip install pyinstaller for the pip version wanted
-pyinstaller $HOME/dev/rt/src/rt.py --distpath ./bin --workpath ./build --paths $HOME/dev/rt/src  --onefile
-
-echo "Installing RT into /opt/rt ..."
-sudo cp -v ./bin/rt /usr/bin
-
-
+echo "Installing RT into /usr/local/bin"
+sudo mkdir -p /usr/local/src/rt && sudo cp -v ./src/* /usr/local/src/rt/
+sudo cp rt /usr/local/bin/
+sudo chown root:root /usr/local/bin/rt
+sudo chown -R root:root /usr/local/src/rt
+sudo chmod 555 /usr/local/bin/rt
