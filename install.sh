@@ -1,7 +1,12 @@
-#/bib/bash
+#/bin/sh 
 
-buildnum=`git log --pretty=format:'%h' -n 1`
-echo "num = \""$buildnum"\"" > ./src/buildnum.py
+FILE=build.sh
+if [ -f "$FILE" ]; then
+    sh build.sh
+else
+    echo "Building omited"
+fi
+
 
 echo "Installing RT into /usr/local/bin"
 sudo mkdir -p /usr/local/src/rt && sudo cp -v ./src/* /usr/local/src/rt/

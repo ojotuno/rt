@@ -1,0 +1,8 @@
+root_dir ./
+target_dir ./
+
+add ../src
+add ../rt
+add install.sh 
+
+pack rt.tar.gz
