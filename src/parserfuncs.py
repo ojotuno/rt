@@ -40,16 +40,27 @@ def tokenize(line, lineNum, separator=' '):
 
 # append add instruction to the list
 def append_instruction(action, data, from_as_data = "", lineNum = -1):
-    i = g.Instruction(action, data, from_as_data, lineNum)
-    g.instructions.append(i)
+    inst = g.Instruction(action, data, from_as_data, lineNum)
+    process_instruction(inst)
 
 # set root_dir
-def set_root_dir(value):
-    g.root_dir = value
+def set_root_dir(path, lineNum):
+    path = utils.resolve(path, lineNum)
+    if (not utils.using_wildcards(path) and os.path.isdir(path)):
+        g.root_dir = os.path.abspath(path)
+        os.chdir(g.root_dir) #set working directoy
+        msg.info("set root_dir -> " + path)
+    else:
+        msg.error("root_dir contains a invalid path", lineNum)
 
 #set targer_dir
-def set_target_dir(value):
-    g.target_dir = value
+def set_target_dir(path, lineNum):
+    path = utils.resolve(path, lineNum)
+    if not utils.using_wildcards(path)  and os.path.isdir(path):
+        g.target_dir = path
+        msg.info("set target_dir -> " + path)
+    else:
+        msg.error("target_dir contains a invalid path", lineNum)
 
 #print functions
 def print_str(str):
@@ -61,122 +72,108 @@ def add_arguments():
         if i > 0: # discard rt name
             g.arguments.append(arg)
 
+def process_instruction(inst):
+    searchPath = ""
+    ## set paths from ignore
+    if inst.action == g.action_t.ignore:
+        if len(inst.from_as) > 0 :
+            if os.path.isabs(inst.from_as):
+                searchPath = inst.from_as + "/" + inst.data
+            else:
+                msg.error("Instructions only allow from-statement values as absolute path. Aborted!", inst.line)
+        else:
+            searchPath = os.path.abspath(inst.data)
+    else: # set path from add
+        searchPath = os.path.abspath(inst.data)
+
+    filesPerInstruc = []
+    if msg.g_error == False:
+        if "*" in searchPath: # WILDCARDS
+            try:
+                filesPerInstruc = glob.glob(searchPath, recursive=True) ## add files from wildcards
+            except:
+                msg.error(inst.data + " cannot be resolved")
+        else: # NOT WILDCARDS
+            if os.path.isdir(searchPath): ## if directory
+                for currentDir, subdirs, files in os.walk(searchPath):
+                    for f in files:
+                        filesPerInstruc.append(currentDir + "/" + f)
+            elif os.path.isfile(searchPath): # add just a file
+                if len(inst.from_as) == 0:
+                    if inst.action == g.action_t.ignore:
+                        filesPerInstruc = searchPath
+                    else:
+                        filesPerInstruc = [[searchPath], [searchPath.replace(g.root_dir, "")]]
+                else: # there is from/as
+                    if inst.action == g.action_t.ignore:
+                        filesPerInstruc = inst.from_as + searchPath
+                    else:
+                        if inst.from_as[len(inst.from_as)-1] == "/": # file added into dir
+                            msg.info(colors.darkblue + searchPath + colors.off + 
+                                    " will be added into " + colors.darkblue + inst.from_as + colors.off)
+                            inst.from_as = inst.from_as + searchPath
+                        else: # file renamed
+                            msg.info(colors.darkblue + searchPath + colors.off + " renamed to " +
+                                    colors.darkblue + inst.from_as + colors.off)
+
+                        filesPerInstruc = [[searchPath], [inst.from_as]]
+            else:
+                msg.warning("File " + searchPath + " not found in line " + str(inst.line) + ". Step skipped!")
+                pass                
+
+        ## ADD files  
+        if (inst.action == g.action_t.add): 
+            if len(filesPerInstruc) > 0 and type(filesPerInstruc[0]) is str: #directories -> get dest list
+                pos = searchPath.find('*')
+                if pos > -1:
+                    root = searchPath[:pos] # get path until first occurence of * (if so)
+                else:
+                    root = searchPath
+
+                if len(inst.from_as) > 0 and (inst.from_as[len(inst.from_as) - 1] != "/"): # if as value dont ends in /, append it
+                    inst.from_as += '/'
+
+                destFiles = []
+                for f in filesPerInstruc: # generate files in pack file
+                    if len(inst.from_as) > 0:
+                        root = f[:f.rfind("/") + 1] # path of the file
+                        filepath = (f.replace(root, inst.from_as)).replace("//", "/") # sanitace path
+                        destFiles.append(filepath)
+                    else:
+                        destFiles.append(f.replace(g.root_dir, "")) #TODO: option of create root dir will be here
+
+                if len(filesPerInstruc) > 0:
+                    g.packfiles.append([filesPerInstruc, destFiles])
+            else: # it is a file -> insert in global list directly
+                if len(filesPerInstruc) > 0:
+                    g.packfiles.append(filesPerInstruc)
+
+        ## IGNORE files -> remove from list of files to add
+        elif inst.action == g.action_t.ignore:
+            for i in range(len(g.packfiles)): #loop over list of list -> item will be a list
+                if len(g.packfiles[i]) > 0:
+                    for j in range(len(filesPerInstruc)):
+                        for k in range(len(g.packfiles[i][0])): # 0 and 1 will have the same size
+                            if g.packfiles[i][0][k] == filesPerInstruc[j]:
+                                del g.packfiles[i][0][k] #delete from src list
+                                del g.packfiles[i][1][k] #delete froms dest list (path in pack file)
+
 def pack(filename, lineNum):
     # pack file following the instructions
     ########################################
     if (g.target_dir == ""):
-        msg.warning("target_dir not defined. The default target_dir is working directoy")
-        g.target_dir = os.getcwd()
-    else:
-         if not os.path.isdir(g.target_dir):
-            msg.error("target_dir is set but it is not a valid directoy. Aborted!")   
-            msg.warning("target_dir = " + g.target_dir)   
+        msg.warning("target_dir not defined. The default target_dir is the script working directoy")
+        set_target_dir(g.original_workingdir, lineNum)
 
     if g.root_dir == "":
         msg.warning("root_dir is empty. Processing relative paths from working directory")
-        g.root_dir = os.getcwd()
-    else:
-        if os.path.isdir(g.root_dir):
-            os.chdir(g.root_dir) #set working directoy
-        else:
-            msg.error("root_dir is set but it is not a valid directoy. Aborted!")        
-            msg.warning("root_dir = " + g.root_dir)   
-
-    if msg.g_error == False:
-        for i in g.instructions:
-            searchPath = ""
-            ## set paths from ignore
-            if i.action == g.action_t.ignore:
-                if len(i.from_as) > 0 :
-                    if os.path.isabs(i.from_as):
-                        searchPath = i.from_as + "/" + i.data
-                    else:
-                        msg.error("Instructions only allow from-statement values as absolute path. Aborted!", i.line)
-                        break
-                else:
-                    searchPath = os.path.abspath(i.data)
-            else: # set path from add
-                searchPath = os.path.abspath(i.data)
-
-            filesPerInstruc = []
-            if "*" in searchPath: # WILDCARDS
-                try:
-                    filesPerInstruc = glob.glob(searchPath, recursive=True) ## add files from wildcards
-                except:
-                    msg.error(i.data + " cannot be resolved")
-            else: # NOT WILDCARDS
-                if os.path.isdir(searchPath): ## if directory
-                    for currentDir, subdirs, files in os.walk(searchPath):
-                        for f in files:
-                            filesPerInstruc.append(currentDir + "/" + f)
-                elif os.path.isfile(searchPath): # add just a file
-                    if len(i.from_as) == 0:
-                        if i.action == g.action_t.ignore:
-                            filesPerInstruc = searchPath
-                        else:
-                            filesPerInstruc = [[searchPath], [searchPath.replace(g.root_dir, "")]]
-                    else: # there is from/as
-                        if i.action == g.action_t.ignore:
-                            filesPerInstruc = i.from_as + searchPath
-                        else:
-                            if i.from_as[len(i.from_as)-1] == "/": # file added into dir
-                                msg.info(colors.darkblue + searchPath + colors.off + 
-                                        " will be added into " + colors.darkblue + i.from_as + colors.off)
-                                i.from_as = i.from_as + searchPath
-                            else: # file renamed
-                                msg.info(colors.darkblue + searchPath + colors.off + " renamed to " +
-                                        colors.darkblue + i.from_as + colors.off)
-
-                            filesPerInstruc = [[searchPath], [i.from_as]]
-                else:
-                    msg.warning("File " + searchPath + " not found in line " + str(i.line) + ". Step skipped!")
-                    pass                
-
-            ## ADD files  
-            if (i.action == g.action_t.add): 
-                if len(filesPerInstruc) > 0 and type(filesPerInstruc[0]) is str: #directories -> get dest list
-                    pos = searchPath.find('*')
-                    if pos > -1:
-                        root = searchPath[:pos] # get path until first occurence of * (if so)
-                    else:
-                        root = searchPath
-
-                    if len(i.from_as) > 0 and (i.from_as[len(i.from_as) - 1] != "/"): # if as value dont ends in /, append it
-                        i.from_as += '/'
-
-                    destFiles = []
-                    for f in filesPerInstruc: # generate files in pack file
-                        if len(i.from_as) > 0:
-                            root = f[:f.rfind("/") + 1] # path of the file
-                            filepath = (f.replace(root, i.from_as)).replace("//", "/") # sanitace path
-                            destFiles.append(filepath)
-                        else:
-                            destFiles.append(f.replace(g.root_dir, "")) #TODO: option of create root dir will be here
-
-                    if len(filesPerInstruc) > 0:
-                        g.packfiles.append([filesPerInstruc, destFiles])
-                else: # it is a file -> insert in global list directly
-                    if len(filesPerInstruc) > 0:
-                        g.packfiles.append(filesPerInstruc)
-
-            ## IGNORE files -> remove from list of files to add
-            elif i.action == g.action_t.ignore:
-                for i in range(len(g.packfiles)): #loop over list of list -> item will be a list
-                    if len(g.packfiles[i]) > 0:
-                        for j in range(len(filesPerInstruc)):
-                            for k in range(len(g.packfiles[i][0])): # 0 and 1 will have the same size
-                                if g.packfiles[i][0][k] == filesPerInstruc[j]:
-                                    del g.packfiles[i][0][k] #delete from src list
-                                    del g.packfiles[i][1][k] #delete froms dest list (path in pack file)
-    else:
-        msg.error("Errors found, skipping pack")
+        set_root_dir(g.original_workingdir, lineNum)          
 
     if msg.g_error == False:
         create_targz(filename)
-
-    # clean data for the new pack
-    g.instructions = []
-    g.packfiles = []
+        # clean data for the new pack
+        g.instructions = []
+        g.packfiles = []
 
 def run_cmd(command):
     try:
@@ -216,13 +213,12 @@ def create_targz(filename):
     # pack
     for fileList in g.packfiles:
         for i in range(len(fileList[0])):
-            print("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[1][i])
+            print_str("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[1][i])
             tarball.add(fileList[0][i], fileList[1][i])
             currentNumFile += 1
 
     tarball.close()
-    msg.ok()
-
+    msg.success("Package created: " + targzfile)
 
 def extract_ZIP(zipfile):
     msg.error("ZIP files not implemented yet")

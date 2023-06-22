@@ -17,9 +17,6 @@ class Instruction:
     from_as = "" # argument 2. empty = root_dir
     line = -1
 
-#list of instructions {Instructions}
-instructions = []
-
 # list of lists [[[src..], [dest..]], ] to follow to pack
 packfiles = []
 
@@ -31,6 +28,8 @@ root_dir = ""
 
 # target dir
 target_dir = ""
+
+original_workingdir = ""
 
 # install file const
 install_file = "install"

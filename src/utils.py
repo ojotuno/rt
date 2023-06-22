@@ -14,6 +14,9 @@ def rm_backslah_from_path(path):
         return path[: szPath - 1]
     else:
         return path
+    
+def set_origin_workingdir(path):
+    g.original_workingdir = path
 
 def concat_tokens(tokens):
     result = ""
@@ -71,6 +74,9 @@ def resolve_args(argsStr, lineNum):
             msg.error("Argument index out of range", lineNum)
     
     return argsStr
+
+def using_wildcards(path):
+    return '*' in path
 
 def split_path_and_ext(token):
     extDot = token.rfind(".")

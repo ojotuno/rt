@@ -31,6 +31,7 @@ def run_rt(rtfile, url=False):
 # RT entry point
 if __name__ == "__main__":
   nargs = len(sys.argv)
+  utils.set_origin_workingdir(os.getcwd())
 
   if nargs == 1:
     info.show_info()

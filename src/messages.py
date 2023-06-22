@@ -42,7 +42,6 @@ def ok():
     print(rt + c.green + "[OK]" + c.off)
     sys.stdout.flush()
 
-
 def error(msg, lineNun = -1):
     if lineNun == -1:
         print(rt + c.red + "Error: " + msg + c.off)
@@ -54,6 +53,9 @@ def error(msg, lineNun = -1):
     g_counter += 1
     sys.stdout.flush()
 
+def success(msg):
+    print(rt + c.green + msg + c.off)
+    sys.stdout.flush()
 
 def syntax_error(msg, lineNun,):
     print(rt + c.red + "Syntax error in line " + str(lineNun) + ": " + msg + c.off)

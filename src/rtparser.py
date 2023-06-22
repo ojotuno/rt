@@ -108,7 +108,7 @@ def parse_ignore(tokens, lineNum):
 def parse_root_dir(tokens, lineNum):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            pf.set_root_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
+            pf.set_root_dir(utils.resolve(tokens[1], lineNum), lineNum)  # root_dir value
         else:
             msg.syntax_error("root_dir cannot conatins wildcards(*) in the path", lineNum)
     else:
@@ -118,7 +118,7 @@ def parse_root_dir(tokens, lineNum):
 def parse_target_dir(tokens, lineNum):
     if len(tokens) == 2:
         if "*" not in tokens[1]:
-            pf.set_target_dir(utils.resolve(tokens[1], lineNum))  # root_dir value
+            pf.set_target_dir(utils.resolve(tokens[1], lineNum), lineNum)  # root_dir value
         else:
             msg.syntax_error("target_dir cannot conatins wildcards (*) in the path", lineNum)
     else:
