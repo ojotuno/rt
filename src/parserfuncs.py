@@ -94,11 +94,13 @@ def process_instruction(inst):
             except:
                 msg.error(inst.data + " cannot be resolved")
         else: # NOT WILDCARDS
-            if os.path.isdir(searchPath): ## if directory
+            # -------- DIRECTORY ---------#
+            if os.path.isdir(searchPath): 
                 for currentDir, subdirs, files in os.walk(searchPath):
                     for f in files:
                         filesPerInstruc.append(currentDir + "/" + f)
-            elif os.path.isfile(searchPath): # add just a file
+            # ------- FILES ------------#
+            elif os.path.isfile(searchPath): 
                 if len(inst.from_as) == 0:
                     if inst.action == g.action_t.ignore:
                         filesPerInstruc = searchPath
@@ -136,7 +138,6 @@ def process_instruction(inst):
                 destFiles = []
                 for f in filesPerInstruc: # generate files in pack file
                     if len(inst.from_as) > 0:
-                        root = f[:f.rfind("/") + 1] # path of the file
                         filepath = (f.replace(root, inst.from_as)).replace("//", "/") # sanitace path
                         destFiles.append(filepath)
                     else:
@@ -199,7 +200,7 @@ def extract_TAR(tar_file, dest):
 
 def create_targz(filename):
     msg.info(colors.darkmagenta + 'Packing "' + filename + colors.off)
-    targzfile = g.target_dir + "/" + filename
+    targzfile = (g.target_dir + "/" + filename).replace("//", "/") # sanitace path
     if (os.path.isfile(targzfile)):
         os.remove(targzfile)
     tarball = tarfile.open(targzfile, "w:gz")
