@@ -105,7 +105,7 @@ def process_instruction(inst):
                     if inst.action == g.action_t.ignore:
                         filesPerInstruc = searchPath
                     else:
-                        filesPerInstruc = [[searchPath], [searchPath.replace(g.root_dir, "")]]
+                        filesPerInstruc = [[searchPath], [utils.get_filename_from_path(searchPath)]]
                 else: # there is from/as
                     if inst.action == g.action_t.ignore:
                         filesPerInstruc = inst.from_as + searchPath

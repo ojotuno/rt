@@ -93,6 +93,12 @@ def isdir(path):
             return True
     return False
 
+def get_filename_from_path(path):
+    pos = path.rfind("/")
+    if pos >= 0:
+        return path[pos +1:] # /....../file
+    else:
+        return path # a file with no path (install.sh for example)
 
 
 def check_add_statement(val1, val2, lineNum):
