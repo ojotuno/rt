@@ -1,5 +1,13 @@
 # RT - Recipe Tool
 
+## Installation
+
+Downaload .tar.gz release, uncompress and  run install.sh script.
+
+## Update
+
+rt -url https://github.com/ojotuno/rt/releases/download/lastest/rt.rt
+
 ## Description
 
 RT is a tool to pack, check and install applications and dependencies. 
@@ -18,6 +26,8 @@ When calling RT with and .rt, .tar.gz or .zip file as argument it will extract t
 `rt rt-file [ARGS] `
 
 `rt recipe [ARGS] `
+
+`rt -url [URL] `
 
  rt-file or recipe: Can be a RT recipe file or a package file. This argument will be treated as package file if the file have the following extensions: rt, tar.gz, gzip or zip otherwise will try to read the file as a recipe.
 
