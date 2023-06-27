@@ -4,7 +4,7 @@ import math
 import urllib.request as urllib
 import urllib.parse as urlparse
 import messages as msg
-import subprocess as proc
+import parserfuncs as pf
 
 def filename_from_url(url):
     """:return: detected filename or None"""
@@ -255,7 +255,6 @@ def callback_progress(blocks, block_size, total_size, bar_function):
 class ThrowOnErrorOpener(urllib.FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
         msg.error("%s: %s" % (errcode, errmsg))
-        raise Exception
 
 def download(url, out=None, bar=bar_adaptive):
     """High level function, which downloads URL into tmp file in current
@@ -303,7 +302,13 @@ def download(url, out=None, bar=bar_adaptive):
         return filename
     except:
         cmd = "wget --content-disposition " + url
-        proc.run(cmd, stdout=proc.STDOUT, stderr=proc.STDOUT)
+        msg.warning("Trying other way to access" + url)
+        pf.run_cmd(cmd)
+        files = os.listdir('./')
+        if (len(files) > 0):
+            msg.success("Downloaded: " + files[0])
+            return files[0]
+        
         return ""
 
 r"""

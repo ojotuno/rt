@@ -20,7 +20,7 @@ def run_rt(rtfile, url=False):
     if nargs == 3 and url == False:
       dest = sys.argv[2]
     else:
-      dest = "./"
+      dest = os.getcwd()
     core.run_installer(rtfile, dest, ext);            
   
   if msg.g_error == False:
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     info.show_info()
   elif nargs == 3 and sys.argv[1] == "-url":
     filename = wget.download(sys.argv[2])
-    if filename == "":
+    if filename != "":
       run_rt(filename, url=True)
       if os.path.exists(filename):
         os.remove(filename)

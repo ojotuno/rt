@@ -1,11 +1,14 @@
 add ../src as src/
 add ../rt as rt
-add ../install.sh as install
+add ../install.sh
 
+target_dir ../releases
 pack rt.tar.gz
 
-# add ../src as src/
-# add ../rt as rt
-# add ../install.sh as install
+add ../src as src/
+add ../rt as rt
+add ../install.sh
+add install
 
-# pack rt.rt
+target_dir ../releases
+pack rt.rt
