@@ -6,9 +6,10 @@ class action_t(Enum):
     ignore = 1
 
 class Instruction:
-    def __init__(self, action, data, from_as, lineNum):
+    def __init__(self, action, data, as_or_in, from_as, lineNum):
         self.action = action
         self.data = data
+        self.as_in = as_or_in
         self.from_as = from_as
         self.line = lineNum
 
@@ -17,7 +18,7 @@ class Instruction:
     from_as = "" # argument 2. empty = root_dir
     line = -1
 
-# list of lists [[[src..], [dest..]], ] to follow to pack
+# list of lists [[src, dest], [src, dest], ...] to follow to pack
 packfiles = []
 
 # recepie arguments <name, value>
@@ -50,4 +51,5 @@ class Keywords:
     GIT = "git"
     SVN = "svn"
     AS = "as"
+    IN = "in"
     FROM = "from"

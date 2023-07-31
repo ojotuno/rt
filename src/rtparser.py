@@ -88,9 +88,9 @@ def parse_add(tokens, lineNum):
     if numTokens == 2:
         if utils.check_add_statement(tokens[1], "", lineNum):
             pf.append_instruction(g.action_t.add, tokens[1], lineNum=lineNum)
-    elif numTokens == 4 and tokens[2] == kw.AS:
+    elif numTokens == 4 and (tokens[2] == kw.AS or tokens[2] == kw.IN):
         if utils.check_add_statement(tokens[1], tokens[3], lineNum):
-            pf.append_instruction(g.action_t.add, tokens[1], tokens[3], lineNum)
+            pf.append_instruction(g.action_t.add, tokens[1], tokens[2], tokens[3], lineNum)
     else:
         return msg.syntax_error("The syntax of add isntruciton is: add PATH [as PATH]* ",lineNum)
 
@@ -101,7 +101,7 @@ def parse_ignore(tokens, lineNum):
             pf.append_instruction(g.action_t.ignore, tokens[1], lineNum=lineNum)
     elif numTokens == 4 and tokens[2] == kw.FROM:
         if utils.check_ignore_statement(tokens[1], tokens[3], lineNum):
-            pf.append_instruction(g.action_t.ignore, tokens[1], tokens[3], lineNum)
+            pf.append_instruction(g.action_t.ignore, tokens[1], "", tokens[3], lineNum)
     else:
         return msg.syntax_error("The syntax of ignore isntruciton is: ignore PATH [from PATH]* ", lineNum)
 

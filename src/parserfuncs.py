@@ -39,8 +39,8 @@ def tokenize(line, lineNum, separator=' '):
 
 
 # append add instruction to the list
-def append_instruction(action, data, from_as_data = "", lineNum = -1):
-    inst = g.Instruction(action, data, from_as_data, lineNum)
+def append_instruction(action, data,  as_or_in = "", from_as_data = "", lineNum = -1):
+    inst = g.Instruction(action, data, as_or_in, from_as_data, lineNum)
     process_instruction(inst)
 
 # set root_dir
@@ -72,6 +72,28 @@ def add_arguments():
         if i > 0: # discard rt name
             g.arguments.append(arg)
 
+def process_file(inst, filename):
+    if len(inst.from_as) == 0:
+        if inst.action == g.action_t.ignore:
+            filesPerInstruc = filename
+        else: # add just the file  
+            filesPerInstruc = [[filename], [utils.get_filename_from_path(filename)]] 
+    else: # there is from/as
+        if inst.action == g.action_t.ignore:
+            filesPerInstruc = inst.from_as + filename
+        else: # add
+            if inst.as_in == g.Keywords.AS:
+                filesPerInstruc.append([filename], [inst.from_as])
+            elif inst.as_in == g.Keywords.IN:
+                # adds a / if the from_as value does not have it. 
+                if inst.from_as[len(inst.from_as)-1] == "/": 
+                    inst.from_as = inst.from_as + filename
+                else:
+                    inst.from_as = inst.from_as + "/" + filename
+                
+            filesPerInstruc = [[filename], [inst.from_as]]
+    return filesPerInstruc
+
 def process_instruction(inst):
     searchPath = ""
     ## set paths from ignore
@@ -80,17 +102,19 @@ def process_instruction(inst):
             if os.path.isabs(inst.from_as):
                 searchPath = inst.from_as + "/" + inst.data
             else:
-                msg.error("Instructions only allow from-statement values as absolute path. Aborted!", inst.line)
+                msg.error("Instructions only allows absolute paths in from-statement. Aborted!", inst.line)
         else:
             searchPath = os.path.abspath(inst.data)
     else: # set path from add
         searchPath = os.path.abspath(inst.data)
 
     filesPerInstruc = []
+    # get all the files
     if msg.g_error == False:
         if "*" in searchPath: # WILDCARDS
             try:
-                filesPerInstruc = glob.glob(searchPath, recursive=True) ## add files from wildcards
+                # resolve wildcards and get files
+                filesPerInstruc = glob.glob(searchPath, recursive=True) 
             except:
                 msg.error(inst.data + " cannot be resolved")
         else: # NOT WILDCARDS
@@ -101,63 +125,54 @@ def process_instruction(inst):
                         filesPerInstruc.append(currentDir + "/" + f)
             # ------- FILES ------------#
             elif os.path.isfile(searchPath): 
-                if len(inst.from_as) == 0:
-                    if inst.action == g.action_t.ignore:
-                        filesPerInstruc = searchPath
-                    else:
-                        filesPerInstruc = [[searchPath], [utils.get_filename_from_path(searchPath)]]
-                else: # there is from/as
-                    if inst.action == g.action_t.ignore:
-                        filesPerInstruc = inst.from_as + searchPath
-                    else:
-                        if inst.from_as[len(inst.from_as)-1] == "/": # file added into dir
-                            msg.info(colors.darkblue + searchPath + colors.off + 
-                                    " will be added into " + colors.darkblue + inst.from_as + colors.off)
-                            inst.from_as = inst.from_as + searchPath
-                        else: # file renamed
-                            msg.info(colors.darkblue + searchPath + colors.off + " renamed to " +
-                                    colors.darkblue + inst.from_as + colors.off)
-
-                        filesPerInstruc = [[searchPath], [inst.from_as]]
+                filesPerInstruc = searchPath
             else:
                 msg.warning("File " + searchPath + " not found in line " + str(inst.line) + ". Step skipped!")
                 pass                
 
         ## ADD files  
-        if (inst.action == g.action_t.add): 
-            if len(filesPerInstruc) > 0 and type(filesPerInstruc[0]) is str: #directories -> get dest list
-                pos = searchPath.find('*')
-                if pos > -1:
-                    root = searchPath[:pos] # get path until first occurence of * (if so)
-                else:
-                    root = searchPath
-
-                if len(inst.from_as) > 0 and (inst.from_as[len(inst.from_as) - 1] != "/"): # if as value dont ends in /, append it
-                    inst.from_as += '/'
-
-                destFiles = []
-                for f in filesPerInstruc: # generate files in pack file
-                    if len(inst.from_as) > 0:
-                        filepath = (f.replace(root, inst.from_as)).replace("//", "/") # sanitace path
-                        destFiles.append(filepath)
+        if (inst.action == g.action_t.add and len(filesPerInstruc) > 0): 
+            for f in filesPerInstruc:
+                if "/" in f: #directories -> get dest list
+                    pos = searchPath.rfind('/')
+                    if pos > -1: # constains a wildcard
+                        root = searchPath[:pos] # get path until first occurence of * (if so)
                     else:
-                        destFiles.append(f.replace(g.root_dir, "")) #TODO: option of create root dir will be here
+                        root = searchPath
+                    
+                    destFiles = []
+                    if len(inst.from_as) > 0:
+                        if inst.as_in == g.Keywords.AS:
+                            if inst.from_as[len(inst.from_as)-1] != "/":
+                                g.packfiles.append([f, inst.from_as])
+                            else:
+                                msg.error("Value of as-statement cannot be a path. Aborted!", str(inst.line))
+                                break
+                        elif inst.as_in == g.Keywords.IN:
+                             # if as value doesn´t end in /, append it
+                            if inst.from_as[len(inst.from_as) - 1] != "/": 
+                                inst.from_as += '/'
+                            destFiles = (f.replace(root, inst.from_as)).replace("//", "/") # sanitace path
+                            g.packfiles.append([f, destFiles])
+                    else:
+                        destFiles = (f.replace(root, "")).replace("//", "/") # sanitace path
+                        g.packfiles.append([f, destFiles])
+                  
+                    # destFiles.append(f.replace(g.root_dir, "")) #TODO: option of create root dir will be here
 
-                if len(filesPerInstruc) > 0:
-                    g.packfiles.append([filesPerInstruc, destFiles])
-            else: # it is a file -> insert in global list directly
-                if len(filesPerInstruc) > 0:
-                    g.packfiles.append(filesPerInstruc)
+                else: # it is a file -> insert in global list directly
+                    g.packfiles.append([f, ""])
 
         ## IGNORE files -> remove from list of files to add
         elif inst.action == g.action_t.ignore:
-            for i in range(len(g.packfiles)): #loop over list of list -> item will be a list
-                if len(g.packfiles[i]) > 0:
-                    for j in range(len(filesPerInstruc)):
-                        for k in range(len(g.packfiles[i][0])): # 0 and 1 will have the same size
-                            if g.packfiles[i][0][k] == filesPerInstruc[j]:
-                                del g.packfiles[i][0][k] #delete from src list
-                                del g.packfiles[i][1][k] #delete froms dest list (path in pack file)
+            i = 0
+            while i < len(g.packfiles): #loop over list of list -> item will be a list
+                for fileToignore in filesPerInstruc:
+                    if g.packfiles[i][0] == fileToignore:
+                        del g.packfiles[i]
+                        i -= 1
+                i += 1
+
 
 def pack(filename, lineNum):
     # pack file following the instructions
@@ -206,17 +221,14 @@ def create_targz(filename):
     tarball = tarfile.open(targzfile, "w:gz")
     numFiles = 0
     #calculate num of files
-    for fileList in g.packfiles:
-        for i in range(len(fileList[0])):
-            numFiles +=1
-
+    numFiles = len(g.packfiles)
     currentNumFile = 1
+
     # pack
     for fileList in g.packfiles:
-        for i in range(len(fileList[0])):
-            print_str("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[1][i])
-            tarball.add(fileList[0][i], fileList[1][i])
-            currentNumFile += 1
+        print_str("[" + str(currentNumFile) +  "/" + str(numFiles) + "] " + fileList[0] + " -> " + fileList[1])
+        tarball.add(fileList[0], fileList[1])
+        currentNumFile += 1
 
     tarball.close()
     msg.success("Package created: " + targzfile)
