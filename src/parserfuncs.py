@@ -72,28 +72,6 @@ def add_arguments():
         if i > 0: # discard rt name
             g.arguments.append(arg)
 
-def process_file(inst, filename):
-    if len(inst.from_as) == 0:
-        if inst.action == g.action_t.ignore:
-            filesPerInstruc = filename
-        else: # add just the file  
-            filesPerInstruc = [[filename], [utils.get_filename_from_path(filename)]] 
-    else: # there is from/as
-        if inst.action == g.action_t.ignore:
-            filesPerInstruc = inst.from_as + filename
-        else: # add
-            if inst.as_in == g.Keywords.AS:
-                filesPerInstruc.append([filename], [inst.from_as])
-            elif inst.as_in == g.Keywords.IN:
-                # adds a / if the from_as value does not have it. 
-                if inst.from_as[len(inst.from_as)-1] == "/": 
-                    inst.from_as = inst.from_as + filename
-                else:
-                    inst.from_as = inst.from_as + "/" + filename
-                
-            filesPerInstruc = [[filename], [inst.from_as]]
-    return filesPerInstruc
-
 def process_instruction(inst):
     searchPath = ""
     ## set paths from ignore
@@ -125,7 +103,7 @@ def process_instruction(inst):
                         filesPerInstruc.append(currentDir + "/" + f)
             # ------- FILES ------------#
             elif os.path.isfile(searchPath): 
-                filesPerInstruc = searchPath
+                filesPerInstruc.append(searchPath)
             else:
                 msg.warning("File " + searchPath + " not found in line " + str(inst.line) + ". Step skipped!")
                 pass                

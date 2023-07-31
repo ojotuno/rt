@@ -1,12 +1,10 @@
-add ../src as src/
-add ../rt as rt
+add ../src in src/
 add ../install.sh
 
 target_dir ../releases
 pack rt.tar.gz
 
-add ../src as src/
-add ../rt as rt
+add ../src in src/
 add ../install.sh
 add install
 
