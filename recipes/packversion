@@ -1,4 +1,4 @@
-add ../src in src/
+add ../src/* in src/
 add ../install.sh
 
 target_dir ../releases
