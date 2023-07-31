@@ -4,7 +4,7 @@ add ../install.sh
 target_dir ../releases
 pack rt.tar.gz
 
-add ../src in src/
+add ../src/* in src/
 add ../install.sh
 add install
 
