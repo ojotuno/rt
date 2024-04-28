@@ -13,6 +13,7 @@ def parse(filename):
         # read recepie file
         for line in file:
             lineNum = lineNum + 1
+            g.resolved = False # reset resolved
             parseLine(line, lineNum)
 
         file.close()
@@ -48,7 +49,6 @@ def parseLine(line, lineNum):
             parse_pack(tokens, lineNum)
         else:
             msg.syntax_error("Keyword not recognised", lineNum)
-
 
 ######################## Actions ########################
 def parse_pack(tokens, lineNum):
@@ -124,3 +124,5 @@ def parse_target_dir(tokens, lineNum):
     else:
         msg.syntax_error("target_dir only accepts one value", lineNum)
 
+def parse_args(tokens, linenum):
+    msg.debug(tokens)

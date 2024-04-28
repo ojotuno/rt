@@ -35,6 +35,9 @@ original_workingdir = ""
 # install file const
 install_file = "install"
 
+# Flag: indicates if in the current line there is comething that has been resolved -> args[] or $()
+resolved = False
+
 # Constants (keywords)
 class Keywords:
     ADD = "add"

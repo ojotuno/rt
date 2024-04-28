@@ -25,6 +25,8 @@ def concat_tokens(tokens):
         str = re.match(rexpr, token)
         if str is not None:
             result += (str.group())[1:-1]
+        elif g.resolved == True:
+            result += token
     return result
 
 def create_command(tokens):
@@ -37,6 +39,9 @@ def resolve(str, lineNum):
     value = ""
     if "$" in str:
         value = resolve_env_vars(str, lineNum)
+        global g_error
+        if g_error == False:
+            g.resolved = True
     else:
         value = str
     
@@ -67,8 +72,9 @@ def resolve_args(argsStr, lineNum):
     pattern = r"args\[(\d+)\]"
     match = re.search(pattern, argsStr)
     if match is not None:
-        index = int(match.group(1))             
+        index = int(match.group(1)) # get content between the []     
         if len(g.arguments) > index:
+            g.resolved = True
             return g.arguments[index]
         else:
             msg.error("Argument index out of range", lineNum)
