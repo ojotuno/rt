@@ -1,8 +1,12 @@
 import os
+import sys
 import globals as g
 import parserfuncs as pf
 import messages as msg
 import utils
+import random as rand
+import wget
+
 
 kw = g.Keywords()
 
@@ -47,6 +51,8 @@ def parseLine(line, lineNum):
             parse_svn(tokens, lineNum)
         elif keyword == kw.PACK:
             parse_pack(tokens, lineNum)
+        elif keyword == kw.RT:
+            invoke_rt(tokens, lineNum)
         else:
             msg.syntax_error("Keyword not recognised", lineNum)
 
@@ -124,5 +130,39 @@ def parse_target_dir(tokens, lineNum):
     else:
         msg.syntax_error("target_dir only accepts one value", lineNum)
 
-def parse_args(tokens, linenum):
-    msg.debug(tokens)
+
+import core
+import shutil
+
+def invoke_rt(tokens, lineNum):
+    if len(tokens) in [2,3]:
+        def invoke_rt(ext, rtfile, remove=False):
+            if ext not in [".rt", ".tar.gz", ".zip"]:
+                core.process_rtfile(rtfile, core.RT_MODE.Call) # try to precess install recipe
+                if remove:
+                    os.remove(rtfile)
+            else:
+                # generate randome name of file (emulare context call)
+                rand.seed(rand.randint(0, 10))
+                tmpDirName = "rt_invoke_context_" + str(rand.randint(0, sys.maxsize) + (int)(10000000*rand.random()));
+                # create temporary file to execute rt to not mess with previous rt file
+                os.mkdir(tmpDirName)
+                core.run_installer(rtfile, tmpDirName, ext);      
+                #remove tmpDir and content
+                shutil.rmtree(tmpDirName)
+                os.remove(rtfile)
+
+        #execute rt
+        rtfile = ""
+        remove = False
+        if len(tokens) == 3 and tokens[1] == "-url":
+            rtfile = wget.download(tokens[2])
+            remove = True
+        elif len(tokens) == 2:
+            rtfile = tokens[1]
+        else:
+            msg.syntax_error("Invalind call to rt. Command: rt -url(optional) <recipe/rt-file>", lineNum)
+            
+        invoke_rt(utils.getFullExt(rtfile), rtfile, remove)
+    else:
+        msg.syntax_error("Invalind call to rt. Command: rt -url(optional) <recipe/rt-file>", lineNum)

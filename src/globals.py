@@ -56,3 +56,4 @@ class Keywords:
     AS = "as"
     IN = "in"
     FROM = "from"
+    RT = "rt"

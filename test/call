@@ -1,0 +1,20 @@
+#testing hello-world -> OK
+#rt hello-world
+
+#print -url recipe -> OK
+#rt -url https://venus.gtd.es/owncloud/index.php/s/lUkSHG5qvKdToEe/download
+
+#print -url rtfile -> OK
+#rt -url https://venus.gtd.es/owncloud/index.php/s/xTlxWBAMMtwJJcy/download
+
+#expected fail  -> OK
+# print "Testing rt"
+# rt 
+
+#expected fail -> OK
+# print "Testing rt hello-world nofile"
+# rt hello-world nofilename
+
+#expected fail -> OK
+# print "Testing rt -urk"
+# rt -url
