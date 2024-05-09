@@ -141,13 +141,16 @@ def invoke_rt(tokens, lineNum):
                 if remove:
                     os.remove(rtfile)
             else:
+                msg.debug("rt file")
                 tmpDir = utils.createTmpDir()
-                currentDir = os.curdir
-                os.chdir(tmpDir)
+                print("created tmp dir")
+                currentDir = os.getcwd()
+                print("Current working dir = " + currentDir)
+                # os.chdir(tmpDir)
+                # print("Entered in " + os.getcwd())
+                print("Running installer...")
                 core.run_installer(rtfile, tmpDir, ext);      
-                os.chdir(currentDir)
                 utils.removeTmpDir(tmpDir)
-                os.remove(rtfile)
 
         #execute rt
         rtfile = ""

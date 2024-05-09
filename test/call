@@ -1,6 +1,8 @@
 #testing hello-world -> OK
 #rt hello-world
 
+rt test-install.rt
+
 #print -url recipe -> OK
 #rt -url https://venus.gtd.es/owncloud/index.php/s/lUkSHG5qvKdToEe/download
 

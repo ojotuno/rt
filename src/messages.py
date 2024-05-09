@@ -74,6 +74,7 @@ def warning(msg):
 def debug(msg):
     print(c.magenta + rt_debug + c.off)
     print(msg)
+    print("----------------------")
     sys.stdout.flush()
 
 

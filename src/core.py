@@ -60,20 +60,21 @@ def run_installer(src, dest, ext):
 
     # 3. unpack into dir
     if ext in [".rt", ".tar.gz"]:
+        msg.debug(src)
         pf.extract_TAR(src, dir)
     else:
         pf.extract_ZIP(src, dir) #TODO: not implemented yet
 
-    install_foudn = False
+    install_found = False
     install_path = ""
     for currrentDir, dirname, files in os.walk(dir):
         if g.install_file in files:
-            install_foudn = True
+            install_found = True
             install_path = currrentDir
             break
 
     # check if "install" filename exist
-    if install_foudn:
+    if install_found:
         process_rtfile(install_path + "/" + g.install_file, RT_MODE.Install) # from install = True
     else:
         msg.warning("Installation recipe not found.")    
