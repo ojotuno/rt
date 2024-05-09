@@ -72,7 +72,7 @@ def warning(msg):
 
 
 def debug(msg):
-    print(rt_debug)
+    print(c.magenta + rt_debug + c.off)
     print(msg)
     sys.stdout.flush()
 

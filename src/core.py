@@ -5,6 +5,7 @@ import messages as msg
 import utils
 import parserfuncs as pf
 import sys
+import wget
 
 class RT_MODE:
    Default = 0
@@ -31,6 +32,13 @@ def run_rt(rtfile, url=False):
     msg.done()
   else:
     msg.done_not_ok()
+
+def download_and_run_file(url):
+    [filename, tmpDir] = wget.download(url)
+    if filename != "":
+      run_rt(filename, url=True)
+    os.chdir("..")
+    utils.removeTmpDir(tmpDir)
 
 def process_rtfile(rtFile, mode:RT_MODE):
     if mode == RT_MODE.Default:

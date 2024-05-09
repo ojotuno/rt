@@ -5,6 +5,7 @@ import urllib.request as urllib
 import urllib.parse as urlparse
 import messages as msg
 import parserfuncs as pf
+import utils
 
 def filename_from_url(url):
     """:return: detected filename or None"""
@@ -254,7 +255,7 @@ def callback_progress(blocks, block_size, total_size, bar_function):
 
 class ThrowOnErrorOpener(urllib.FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
-        msg.error("%s: %s" % (errcode, errmsg))
+        msg.warning("%s: %s" % (errcode, errmsg))
 
 def download(url, out=None, bar=bar_adaptive):
     """High level function, which downloads URL into tmp file in current
@@ -265,6 +266,11 @@ def download(url, out=None, bar=bar_adaptive):
     :param out: output filename or directory
     :return:    filename where URL is downloaded to
     """
+
+    # create tmp dir and operate there
+    tmpDir = utils.createTmpDir()
+    os.chdir(tmpDir)
+    
     names = dict()
     names["out"] = out or ''
     names["url"] = filename_from_url(url)
@@ -299,14 +305,16 @@ def download(url, out=None, bar=bar_adaptive):
 
         os.rename(tmpfile, filename)
         #print headers
-        return filename
+        return [filename, tmpDir]
     except:
         cmd = "wget --content-disposition " + url
-        msg.warning("Trying other way to access" + url)
+        msg.warning("Trying other way to download " + url)
         pf.run_cmd(cmd) 
         files = os.listdir('./')
-        if (len(files) > 0):
+        if (len(files) == 1):
             msg.success("Downloaded: " + files[0])
-            return files[0]
-        
-        return ""
+            return [files[0], tmpDir]
+        else:
+            msg.error("more than one file downloaded")
+            return ["", tmpDir]
+

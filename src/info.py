@@ -26,6 +26,7 @@ def show_info():
   print(colors.off + "rt RECIPE_FILE ")
   print(colors.off + "rt RTFILE.[rt, tar.gz, zip] [DEST]* ")
   print(colors.off + "rt -url [url]")
+  print(colors.off + "rt -update")
   print(colors.off + "---------- ")
   print(colors.off + "Every line has to be formed by " + colors.blue + "keyword " + colors.yellow + "argument")
   print(colors.off + "Keywords: root_dir, target_dir, add, ignore, print, args, git, svn")

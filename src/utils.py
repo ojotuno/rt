@@ -2,6 +2,10 @@ import env_var as env
 import re  # regular expresions
 import messages as msg
 import globals as g
+import random as rand
+import os
+import shutil
+import sys
 
 def getFullExt(str):
     index = str.find(".")
@@ -132,3 +136,15 @@ def check_ignore_statement(val1, val2, lineNum):
             msg.syntax_error("From value has to be a valid directory", lineNum)
             return False
     return True
+
+def createTmpDir() -> str:
+     # generate randome name of file (emulare context call)
+    rand.seed(rand.randint(0, 10))
+    tmpDirName = "rt_tmpdir_" + str(rand.randint(0, sys.maxsize) + (int)(10000000*rand.random()));
+    # create temporary file to execute rt to not mess with previous rt file
+    os.mkdir(tmpDirName)    
+    return tmpDirName
+
+def removeTmpDir(tmpDir:str):
+    #remove tmpDir and content
+    shutil.rmtree(tmpDir)

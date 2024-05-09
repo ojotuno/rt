@@ -4,7 +4,6 @@ import globals as g
 import parserfuncs as pf
 import messages as msg
 import utils
-import random as rand
 import wget
 
 
@@ -142,14 +141,12 @@ def invoke_rt(tokens, lineNum):
                 if remove:
                     os.remove(rtfile)
             else:
-                # generate randome name of file (emulare context call)
-                rand.seed(rand.randint(0, 10))
-                tmpDirName = "rt_invoke_context_" + str(rand.randint(0, sys.maxsize) + (int)(10000000*rand.random()));
-                # create temporary file to execute rt to not mess with previous rt file
-                os.mkdir(tmpDirName)
-                core.run_installer(rtfile, tmpDirName, ext);      
-                #remove tmpDir and content
-                shutil.rmtree(tmpDirName)
+                tmpDir = utils.createTmpDir()
+                currentDir = os.curdir
+                os.chdir(tmpDir)
+                core.run_installer(rtfile, tmpDir, ext);      
+                os.chdir(currentDir)
+                utils.removeTmpDir(tmpDir)
                 os.remove(rtfile)
 
         #execute rt
