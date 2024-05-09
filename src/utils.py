@@ -39,8 +39,7 @@ def resolve(str, lineNum):
     value = ""
     if "$" in str:
         value = resolve_env_vars(str, lineNum)
-        global g_error
-        if g_error == False:
+        if msg.g_error == False:
             g.resolved = True
     else:
         value = str

@@ -303,59 +303,10 @@ def download(url, out=None, bar=bar_adaptive):
     except:
         cmd = "wget --content-disposition " + url
         msg.warning("Trying other way to access" + url)
-        pf.run_cmd(cmd)
+        pf.run_cmd(cmd) 
         files = os.listdir('./')
         if (len(files) > 0):
             msg.success("Downloaded: " + files[0])
             return files[0]
         
         return ""
-
-r"""
-features that require more tuits for urlretrieve API
-http://www.python.org/doc/2.6/library/urllib.html#urllib.urlretrieve
-
-[x] autodetect filename from URL
-[x] autodetect filename from headers - Content-Disposition
-    http://greenbytes.de/tech/tc2231/
-[ ] make HEAD request to detect temp filename from Content-Disposition
-[ ] process HTTP status codes (i.e. 404 error)
-    http://ftp.de.debian.org/debian/pool/iso-codes_3.24.2.orig.tar.bz2
-[ ] catch KeyboardInterrupt
-[ ] optionally preserve incomplete file
-[x] create temp file in current directory
-[ ] resume download (broken connection)
-[ ] resume download (incomplete file)
-[x] show progress indicator
-    http://mail.python.org/pipermail/tutor/2005-May/038797.html
-[x] do not overwrite downloaded file
- [x] rename file automatically if exists
-[x] optionally specify path for downloaded file
-
-[ ] options plan
- [x] -h, --help, --version (CHAOS speccy)
-[ ] clpbar progress bar style
-_ 30.0Mb at  3.0 Mbps  eta:   0:00:20   30% [=====         ]
-[ ] test "bar \r" print with \r at the end of line on Windows
-[ ] process Python 2.x urllib.ContentTooShortError exception gracefully
-    (ideally retry and continue download)
-
-    (tmpfile, headers) = urllib.urlretrieve(url, tmpfile, callback_progress)
-  File "C:\Python27\lib\urllib.py", line 93, in urlretrieve
-    return _urlopener.retrieve(url, filename, reporthook, data)
-  File "C:\Python27\lib\urllib.py", line 283, in retrieve
-    "of %i bytes" % (read, size), result)
-urllib.ContentTooShortError: retrieval incomplete: got only 15239952 out of 24807571 bytes
-
-[ ] find out if urlretrieve may return unicode headers
-[ ] test suite for unsafe filenames from url and from headers
-
-[ ] security checks
-  [ ] filename_from_url
-  [ ] filename_from_headers
-  [ ] MITM redirect from https URL
-  [ ] https certificate check
-  [ ] size+hash check helpers
-    [ ] fail if size is known and mismatch
-    [ ] fail if hash mismatch
-"""
