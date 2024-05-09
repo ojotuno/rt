@@ -34,10 +34,11 @@ def run_rt(rtfile, url=False):
     msg.done_not_ok()
 
 def download_and_run_file(url):
+    currentDir = os.getcwd()
     [filename, tmpDir] = wget.download(url)
     if filename != "":
       run_rt(filename, url=True)
-    os.chdir("..")
+    os.chdir(currentDir)
     utils.removeTmpDir(tmpDir)
 
 def process_rtfile(rtFile, mode:RT_MODE):
@@ -52,7 +53,8 @@ def process_rtfile(rtFile, mode:RT_MODE):
 def run_installer(src, dest, ext):
     # 1.decompres in dest or current dir
     dir = ""
-    if len(dest) != 0:
+    decrompressInTmpDir = len(dest) != 0
+    if decrompressInTmpDir:
         dir = os.path.abspath(dest)
         dir = utils.rm_backslah_from_path(dir)
     else:
@@ -60,7 +62,6 @@ def run_installer(src, dest, ext):
 
     # 3. unpack into dir
     if ext in [".rt", ".tar.gz"]:
-        msg.debug(src)
         pf.extract_TAR(src, dir)
     else:
         pf.extract_ZIP(src, dir) #TODO: not implemented yet
@@ -75,6 +76,12 @@ def run_installer(src, dest, ext):
 
     # check if "install" filename exist
     if install_found:
-        process_rtfile(install_path + "/" + g.install_file, RT_MODE.Install) # from install = True
+        if decrompressInTmpDir:
+          currentDir = os.getcwd()
+          os.chdir(dir)
+          process_rtfile(install_path + "/" + g.install_file, RT_MODE.Install) # from install = True
+          os.chdir(currentDir)
+        else:
+          process_rtfile(install_path + "/" + g.install_file, RT_MODE.Install) # from install = True
     else:
         msg.warning("Installation recipe not found.")    

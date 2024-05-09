@@ -131,7 +131,6 @@ def parse_target_dir(tokens, lineNum):
 
 
 import core
-import shutil
 
 def invoke_rt(tokens, lineNum):
     if len(tokens) in [2,3]:
@@ -141,14 +140,9 @@ def invoke_rt(tokens, lineNum):
                 if remove:
                     os.remove(rtfile)
             else:
-                msg.debug("rt file")
                 tmpDir = utils.createTmpDir()
-                print("created tmp dir")
                 currentDir = os.getcwd()
-                print("Current working dir = " + currentDir)
-                # os.chdir(tmpDir)
-                # print("Entered in " + os.getcwd())
-                print("Running installer...")
+                msg.info("Running installer...")
                 core.run_installer(rtfile, tmpDir, ext);      
                 utils.removeTmpDir(tmpDir)
 
