@@ -210,6 +210,3 @@ def create_targz(filename):
 
     tarball.close()
     msg.success("Package created: " + targzfile)
-
-def extract_ZIP(zipfile):
-    msg.error("ZIP files not implemented yet")

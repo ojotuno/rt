@@ -2,7 +2,7 @@ import colors
 import buildnum
 
 def show_logo():                                                                                                                                
-  print(colors.green + """
+  print(colors.green + r"""
  .----------------.  .----------------. 
 | .--------------. || .--------------. |
 | |  _______     | || |  _________   | |
@@ -24,9 +24,10 @@ def show_info():
   print(colors.off + "Usage:")
   print(colors.off + "---------- ")
   print(colors.off + "rt RECIPE_FILE ")
-  print(colors.off + "rt RTFILE.[rt, tar.gz, zip] [DEST]* ")
+  print(colors.off + "rt RTFILE [.rt, .tar.gz] [DEST]* ")
   print(colors.off + "rt -url [url]")
   print(colors.off + "rt -update")
+  print(colors.off + "rt -show <rtfile>")
   print(colors.off + "---------- ")
   print(colors.off + "Every line has to be formed by " + colors.blue + "keyword " + colors.yellow + "argument")
   print(colors.off + "Keywords: root_dir, target_dir, add, ignore, print, args, git, svn")
@@ -36,7 +37,7 @@ def show_info():
   print(colors.off + "Indicates the root directory _path_ where start to walk. Can be changed at any point of the recipe. Instructions are related to this root. The root_dir_in_path indicates the path in the package where stating to include the files, if not used, the files will be inserted exacly as the root_dir indicates.")
   print(colors.off + " ")
   print(colors.blue + "target_dir _path_ ")
-  print(colors.off + "Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.")
+  print(colors.off + r"Indicates the target directory (*\_path\_*) where the pckg will be generated. It is mandatory and has to be declared before calling pack.")
   print(colors.off + "")
   print(colors.blue + "add [file/path] (as [name])*")
   print(colors.blue + "add [file/path] (in [path])*")
@@ -52,12 +53,12 @@ def show_info():
   print(colors.blue + "pack FILENAME -rootdir DIR -mock")
   print(colors.off + "-rootdir includes the DIR as the root dic in the package file")
   print(colors.off + "-mock  Mocks the packing, i, e, it does not pack and shows the files to be included")
-  print(colors.off + "Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.")
+  print(colors.off + r"Starts packing into *\_filename\_* all the files and folders according the instructions given before this call.")
   print(colors.off + "")
   print(colors.blue + "print \"_str_\" ...")
-  print(colors.off + "Prints out the *\_str\_*. To concatenate strings uses spaces.")
+  print(colors.off + r"Prints out the *\_str\_*. To concatenate strings uses spaces.")
   print(colors.off + "")
-  print(colors.blue + "args`")
+  print(colors.blue + "args[<num_arg>]")
   print(colors.off + "The \"args\" keyword contains the value of the arguments being the first position the first argument, not the name of the binary.")
   print(colors.off + "")
   print(colors.blue + "$(ENV)")
