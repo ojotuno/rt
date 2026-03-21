@@ -57,3 +57,6 @@ class Keywords:
     IN = "in"
     FROM = "from"
     RT = "rt"
+    EXIT = "exit"
+    IF = "if"
+    END = "end"

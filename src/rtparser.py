@@ -52,6 +52,8 @@ def parseLine(line, lineNum):
             parse_pack(tokens, lineNum)
         elif keyword == kw.RT:
             invoke_rt(tokens, lineNum)
+        elif keyword == kw.EXIT:
+            parse_exit(tokens, lineNum)
         else:
             msg.syntax_error("Keyword not recognised", lineNum)
 
@@ -160,3 +162,10 @@ def invoke_rt(tokens, lineNum):
         invoke_rt(utils.getFullExt(rtfile), rtfile, remove)
     else:
         msg.syntax_error("Invalind call to rt. Command: rt -url(optional) <recipe/rt-file>", lineNum)
+
+def parse_exit(tokens, lineNum):
+    if len(tokens) == 1:
+        msg.info("Exit")
+        sys.exit(0)
+    else:
+        msg.syntax_error("exit does not accept arguments", lineNum)
