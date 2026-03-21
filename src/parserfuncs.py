@@ -32,7 +32,7 @@ def tokenize(line, lineNum, separator=' '):
             if char not in ['\n', '\t']:
                 token += char
     
-    if len(token) > 0:
+    if len(token) > 0: # process last token
         tokens.append(utils.resolve(token, lineNum))
 
     return tokens
@@ -69,8 +69,8 @@ def print_str(str):
 # get arguments from command line
 def add_arguments():
     for i, arg in enumerate(sys.argv):
-        if i > 0: # discard rt name
-            g.arguments.append(arg)
+        g.arguments.append(arg)
+    g.num_args = str(len(sys.argv))
 
 def process_instruction(inst):
     searchPath = ""

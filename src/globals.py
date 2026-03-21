@@ -23,6 +23,7 @@ packfiles = []
 
 # recepie arguments <name, value>
 arguments = []
+num_args = ""
 
 # root dir -> pair (root_dir, path_in_package)
 root_dir = ""
@@ -51,6 +52,7 @@ class Keywords:
     AND = "and"
     PRINT = "print"
     ARGS = "args"
+    ARGC = "argc"
     GIT = "git"
     SVN = "svn"
     AS = "as"

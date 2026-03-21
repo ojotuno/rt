@@ -1,0 +1,17 @@
+# Test: if with environment variables
+# Assumes HOME and USER are set (standard on Linux)
+
+print "--- if $(HOME) != empty (true) ---"
+if $(HOME) != ""
+print "OK: HOME is set"
+end
+
+print "--- if $(USER) == $(USER) (true) ---"
+if $(USER) == $(USER)
+print "OK: USER == USER"
+end
+
+print "--- if $(USER) != root (depends on env) ---"
+if $(USER) != root
+print "OK: not running as root"
+end

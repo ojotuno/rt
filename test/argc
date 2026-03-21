@@ -1,0 +1,3 @@
+print "RT reciper is being calling with " argc " arguments"
+print args[0]
+print args[1]

@@ -1,0 +1,5 @@
+root_dir .
+target_dir .
+exit
+
+pack rt.rt

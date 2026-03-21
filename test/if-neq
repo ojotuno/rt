@@ -1,0 +1,12 @@
+# Test: != operator (true case)
+print "--- if != (true) ---"
+if hello != world
+print "OK: hello != world"
+end
+
+# Test: != operator (false case - body must NOT print)
+print "--- if != (false) ---"
+if hello != hello
+print "FAIL: this should not be printed"
+end
+print "OK: skipped false block"

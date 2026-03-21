@@ -54,6 +54,8 @@ def parseLine(line, lineNum):
             invoke_rt(tokens, lineNum)
         elif keyword == kw.EXIT:
             parse_exit(tokens, lineNum)
+        elif keyword == kw.IF:
+            parse_if(tokens, lineNum)
         else:
             msg.syntax_error("Keyword not recognised", lineNum)
 
@@ -169,3 +171,6 @@ def parse_exit(tokens, lineNum):
         sys.exit(0)
     else:
         msg.syntax_error("exit does not accept arguments", lineNum)
+
+def parse_if(tokens, lineNum):
+    msg.error("if statement is not implemented yet", lineNum)

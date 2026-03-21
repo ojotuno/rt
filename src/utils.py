@@ -71,11 +71,16 @@ def resolve_env_vars(path, lineNum):
             except:
                 msg.error("Environment variable in line " + env_variable + " does not exists", lineNum)
 
-def resolve_args(argsStr, lineNum):
+def resolve_args(argsStr :str, lineNum : int):
+    # Argc used
+    if argsStr == g.Keywords.ARGC:
+        g.resolved = True
+        return g.num_args
+    # Args pattern used
     pattern = r"args\[(\d+)\]"
     match = re.search(pattern, argsStr)
     if match is not None:
-        index = int(match.group(1)) # get content between the []     
+        index = int(match.group(1)) # get content between the []          
         if len(g.arguments) > index:
             g.resolved = True
             return g.arguments[index]

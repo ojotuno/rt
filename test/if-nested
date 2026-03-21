@@ -1,0 +1,33 @@
+# Test: nested ifs
+print "--- nested if (both true) ---"
+if yes == yes
+if 1 < 2
+print "OK: outer and inner both true"
+end
+end
+
+print "--- nested if (outer true, inner false) ---"
+if yes == yes
+if 2 < 1
+print "FAIL: inner should be false"
+end
+print "OK: outer true, inner skipped"
+end
+
+print "--- nested if (outer false, inner not evaluated) ---"
+if no == yes
+if 1 < 2
+print "FAIL: outer false, inner must not run"
+end
+print "FAIL: outer false, this must not run"
+end
+print "OK: outer false block fully skipped"
+
+print "--- triple nested (all true) ---"
+if a == a
+if 1 < 2
+if foo != bar
+print "OK: three levels deep"
+end
+end
+end

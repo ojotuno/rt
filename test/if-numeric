@@ -1,0 +1,54 @@
+# Test: numeric comparisons
+print "--- if < (true) ---"
+if 3 < 10
+print "OK: 3 < 10"
+end
+
+print "--- if < (false) ---"
+if 10 < 3
+print "FAIL: 10 < 3 should be false"
+end
+print "OK: skipped false block"
+
+print "--- if > (true) ---"
+if 10 > 3
+print "OK: 10 > 3"
+end
+
+print "--- if > (false) ---"
+if 3 > 10
+print "FAIL: 3 > 10 should be false"
+end
+print "OK: skipped false block"
+
+print "--- if <= (true, equal) ---"
+if 5 <= 5
+print "OK: 5 <= 5"
+end
+
+print "--- if <= (true, less) ---"
+if 4 <= 5
+print "OK: 4 <= 5"
+end
+
+print "--- if <= (false) ---"
+if 6 <= 5
+print "FAIL: 6 <= 5 should be false"
+end
+print "OK: skipped false block"
+
+print "--- if >= (true, equal) ---"
+if 5 >= 5
+print "OK: 5 >= 5"
+end
+
+print "--- if >= (true, greater) ---"
+if 6 >= 5
+print "OK: 6 >= 5"
+end
+
+print "--- if >= (false) ---"
+if 4 >= 5
+print "FAIL: 4 >= 5 should be false"
+end
+print "OK: skipped false block"

@@ -1,0 +1,2 @@
+print "Print this string and then exit"
+exit
