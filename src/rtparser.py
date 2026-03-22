@@ -1,10 +1,10 @@
 import os
 import sys
+import subprocess
 import globals as g
 import parserfuncs as pf
 import messages as msg
 import utils
-import wget
 
 
 kw = g.Keywords()
@@ -27,9 +27,13 @@ def parseLine(line, lineNum):
     tokens = pf.tokenize(line, lineNum)
     nTokens = len(tokens)
     if nTokens == 0:
-        pass
+        return
     else:
         keyword = tokens[0]
+        #  If it has failed a comparison, we skip processing until we find the end statement that closes the block.
+        if keyword != kw.END and g.nested_level_comparison_results_failed > 0:
+            return 
+
         if keyword == kw.ADD:
             parse_add(tokens, lineNum)
         elif keyword == kw.IGNORE:
@@ -56,6 +60,8 @@ def parseLine(line, lineNum):
             parse_exit(tokens, lineNum)
         elif keyword == kw.IF:
             parse_if(tokens, lineNum)
+        elif keyword == kw.END:
+            parse_end(tokens, lineNum)
         else:
             msg.syntax_error("Keyword not recognised", lineNum)
 
@@ -134,36 +140,26 @@ def parse_target_dir(tokens, lineNum):
         msg.syntax_error("target_dir only accepts one value", lineNum)
 
 
-import core
-
 def invoke_rt(tokens, lineNum):
-    if len(tokens) in [2,3]:
-        def invoke_rt(ext, rtfile, remove=False):
-            if ext not in [".rt", ".tar.gz", ".zip"]:
-                core.process_rtfile(rtfile, core.RT_MODE.Call) # try to precess install recipe
-                if remove:
-                    os.remove(rtfile)
-            else:
-                tmpDir = utils.createTmpDir()
-                currentDir = os.getcwd()
-                msg.info("Running installer...")
-                core.run_installer(rtfile, tmpDir, ext);      
-                utils.removeTmpDir(tmpDir)
+    if len(tokens) < 2:
+        msg.syntax_error("Invalid call to rt. Command: rt [-url] <recipe/rt-file> [args...]", lineNum)
+        return
 
-        #execute rt
-        rtfile = ""
-        remove = False
-        if len(tokens) == 3 and tokens[1] == "-url":
-            rtfile = wget.download(tokens[2])
-            remove = True
-        elif len(tokens) == 2:
-            rtfile = tokens[1]
+    rt_script = os.path.join(os.path.dirname(__file__), "rt.py")
+
+    if tokens[1] == "-url":
+        if len(tokens) == 3:
+            cmd = [sys.executable, rt_script, "-url", tokens[2]]
         else:
-            msg.syntax_error("Invalind call to rt. Command: rt -url(optional) <recipe/rt-file>", lineNum)
-            
-        invoke_rt(utils.getFullExt(rtfile), rtfile, remove)
+            msg.syntax_error("Invalid call to rt. Command: rt -url <recipe/rt-file>", lineNum)
+            return
     else:
-        msg.syntax_error("Invalind call to rt. Command: rt -url(optional) <recipe/rt-file>", lineNum)
+        cmd = [sys.executable, rt_script] + tokens[1:]
+
+    msg.info("Calling: " + " ".join(tokens))
+    result = subprocess.run(cmd)
+    if result.returncode != 0:
+        msg.error("rt call failed with return code " + str(result.returncode), lineNum)
 
 def parse_exit(tokens, lineNum):
     if len(tokens) == 1:
@@ -173,4 +169,44 @@ def parse_exit(tokens, lineNum):
         msg.syntax_error("exit does not accept arguments", lineNum)
 
 def parse_if(tokens, lineNum):
-    msg.error("if statement is not implemented yet", lineNum)
+    if len(tokens) == 4:
+        g.nested_level += 1
+        operand1 = tokens[1]
+        operator = tokens[2]
+        operand2 = tokens[3]
+
+        if operator in [g.Operators.EQUAL, g.Operators.NOT_EQUAL, g.Operators.GREATER, g.Operators.LESS, g.Operators.CREATER_EQUAL, g.Operators.LESS_EQUAL]:
+            # resolve operands
+            operand1 = utils.resolve(operand1, lineNum)
+            operand2 = utils.resolve(operand2, lineNum)
+
+            # compare operands
+            if operator == g.Operators.EQUAL:
+                condition = operand1 == operand2
+            elif operator == g.Operators.NOT_EQUAL:
+                condition = operand1 != operand2
+            elif operator == g.Operators.GREATER:
+                condition = operand1 > operand2
+            elif operator == g.Operators.LESS:
+                condition = operand1 < operand2
+            elif operator == g.Operators.CREATER_EQUAL:
+                condition = operand1 >= operand2
+            elif operator == g.Operators.LESS_EQUAL:
+                condition = operand1 <= operand2
+
+            if False == condition:
+                g.nested_level_comparison_results_failed = g.nested_level
+            
+        else:
+            msg.syntax_error("Invalid operator in if statement", lineNum)
+
+def parse_end(tokens, lineNum):
+    if len(tokens) == 1:
+        if g.nested_level > 0:
+            g.nested_level -= 1
+            if g.nested_level == g.nested_level_comparison_results_failed:
+                g.nested_level_comparison_results_failed = 0 # reset failed comparison results when the block is closed
+        else:
+            msg.syntax_error("end statement without a previous if statement", lineNum)
+    else:
+        msg.syntax_error("end does not accept arguments", lineNum)

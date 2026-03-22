@@ -39,6 +39,17 @@ install_file = "install"
 # Flag: indicates if in the current line there is comething that has been resolved -> args[] or $()
 resolved = False
 
+class Operators:
+    EQUAL = "=="
+    NOT_EQUAL = "!="
+    GREATER = ">"
+    LESS = "<"
+    CREATER_EQUAL = ">="
+    LESS_EQUAL = "<="
+
+nested_level = 0
+nested_level_comparison_results_failed = 0
+
 # Constants (keywords)
 class Keywords:
     ADD = "add"

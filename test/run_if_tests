@@ -1,3 +1,5 @@
+root_dir ./test
+
 rt if-eq
 rt if-neq
 rt if-numeric

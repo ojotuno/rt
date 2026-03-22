@@ -1,12 +1,11 @@
 # Test: == operator (true case)
-print "--- if == (true) ---"
 if hello == hello
-print "OK: hello == hello"
+    print "OK:--- if == (true) ---"
 end
 
 # Test: == operator (false case - body must NOT print)
-print "--- if == (false) ---"
-if hello == world
-print "FAIL: this should not be printed"
+
+if "hello" == "world"
+print "FAIL:--- if == (false) ---"
 end
-print "OK: skipped false block"
+print "OK:--- if == (false) ---"
