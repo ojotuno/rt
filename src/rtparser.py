@@ -203,9 +203,9 @@ def parse_if(tokens, lineNum):
 def parse_end(tokens, lineNum):
     if len(tokens) == 1:
         if g.nested_level > 0:
-            g.nested_level -= 1
             if g.nested_level == g.nested_level_comparison_results_failed:
                 g.nested_level_comparison_results_failed = 0 # reset failed comparison results when the block is closed
+            g.nested_level -= 1
         else:
             msg.syntax_error("end statement without a previous if statement", lineNum)
     else:
