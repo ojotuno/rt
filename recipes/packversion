@@ -1,12 +1,14 @@
 add ../src/* in src/
 add ../install.sh
 
-target_dir ../releases
+root_dir ..
+> mkdir -p releases
+target_dir releases
 pack rt.tar.gz
 
-add ../src/* in src/
-add ../install.sh
-add install
+add ./src/* in src/
+add ./install.sh
+add ./recipes/install as install
 
-target_dir ../releases
+target_dir ./releases
 pack rt.rt

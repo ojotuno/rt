@@ -69,3 +69,7 @@ def show_info():
   print(colors.off + "")
   print(colors.blue + "exit ")
   print(colors.off + "Exit the execution of the recipe. It does not accept arguments.")
+  print(colors.off + "")
+  print(colors.blue + "> cmd ")
+  print(colors.off + "Runs the specified command.")
+  print(colors.off + "")
