@@ -1,5 +1,10 @@
 from enum import Enum
 
+class Arguments:
+    UPDATE = "-update"
+    URL = "-url"
+    SHOW = "-show"
+
 class action_t(Enum):
     none = -1
     add = 0

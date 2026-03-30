@@ -1,33 +1,58 @@
 # Test: nested ifs
 print "--- nested if (both true) ---"
 if yes == yes
-if 1 < 2
-print "OK: outer and inner both true"
-end
+    if 1 < 2
+        print "OK: outer and inner both true"
+    end
 end
 
 print "--- nested if (outer true, inner false) ---"
 if yes == yes
-if 2 < 1
-print "FAIL: inner should be false"
+    if 2 < 1
+        print "FAIL: inner should be false"
+    end
 end
 print "OK: outer true, inner skipped"
-end
 
 print "--- nested if (outer false, inner not evaluated) ---"
 if no == yes
-if 1 < 2
-print "FAIL: outer false, inner must not run"
+    if 1 == 1
+        print "FAIL: outer false, inner must not run"
+    end
 end
-print "FAIL: outer false, this must not run"
-end
-print "OK: outer false block fully skipped"
 
 print "--- triple nested (all true) ---"
 if a == a
-if 1 < 2
-if foo != bar
-print "OK: three levels deep"
+    if 1 < 2
+        if foo != bar
+            print "OK: three levels deep"
+        end
+    end
+
+    if 0 == 1
+        print "FAIL: this should not run"
+    end
+    print "OK: second inner if false, skipped"
+
+    if 2 > 1
+        print "OK: second inner if true"
+        if 0 == 0
+            print "OK: third inner if true"
+            if 0 == 0
+                print "OK: fourth inner if true"
+            end
+        end
+    end
+
+    if 1 == 1
+        print "OK: second inner if true"
+        if 0 == 1
+            print "FAIL: third inner if false, should not run"
+            if 0 == 0
+                print "FAIL: fourth inner if should not run"
+            end
+            print "FAIL: third inner if false, should not run"
+        end
+    end
 end
-end
-end
+

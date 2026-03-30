@@ -1,8 +1,14 @@
 root_dir ./test
 
+print "TEST if-eq"
 rt if-eq
+print "TEST if-neq"
 rt if-neq
+print "TEST if-numeric"
 rt if-numeric
+print "TEST if-args"
 rt if-args foo bar 42
+print "TEST if-env"
 rt if-env
+print "TEST if-nested"
 rt if-nested

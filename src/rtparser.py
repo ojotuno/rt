@@ -31,7 +31,11 @@ def parseLine(line, lineNum):
     else:
         keyword = tokens[0]
         #  If it has failed a comparison, we skip processing until we find the end statement that closes the block.
-        if keyword != kw.END and g.nested_level_comparison_results_failed > 0:
+        if g.nested_level_comparison_results_failed > 0:
+            if keyword == kw.IF:
+                g.nested_level += 1
+            elif keyword == kw.END:
+                parse_end(tokens, lineNum)
             return 
 
         if keyword == kw.ADD:
@@ -146,17 +150,7 @@ def invoke_rt(tokens, lineNum):
         return
 
     rt_script = os.path.join(os.path.dirname(__file__), "rt.py")
-
-    if tokens[1] == "-url":
-        if len(tokens) == 3:
-            cmd = [sys.executable, rt_script, "-url", tokens[2]]
-        else:
-            msg.syntax_error("Invalid call to rt. Command: rt -url <recipe/rt-file>", lineNum)
-            return
-    else:
-        cmd = [sys.executable, rt_script] + tokens[1:]
-
-    msg.info("Calling: " + " ".join(tokens))
+    cmd = [sys.executable, rt_script] + tokens[1:]
     result = subprocess.run(cmd)
     if result.returncode != 0:
         msg.error("rt call failed with return code " + str(result.returncode), lineNum)
@@ -179,6 +173,14 @@ def parse_if(tokens, lineNum):
             # resolve operands
             operand1 = utils.resolve(operand1, lineNum)
             operand2 = utils.resolve(operand2, lineNum)
+
+            if operand1.isdigit() and operand2.isdigit():
+                operand1 = int(operand1)
+                operand2 = int(operand2)
+            elif operand1.isdigit() and not operand2.isdigit() or \
+                 not operand1.isdigit() and operand2.isdigit():
+                    msg.syntax_error("Cannot compare a numeric operand with a non-numeric operand", lineNum)
+                    return
 
             # compare operands
             if operator == g.Operators.EQUAL:

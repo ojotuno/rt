@@ -3,8 +3,8 @@
 # args[0] = if-args, args[1] = foo, args[2] = bar, args[3] = 42
 
 print "--- if args == literal (true) ---"
-if args[1] == foo
-print "OK: args[1] == foo"
+if args[2] == foo
+print "OK: args[2] == foo"
 end
 
 print "--- if args == literal (false) ---"
@@ -24,12 +24,12 @@ print "OK: args[1] != args[2]"
 end
 
 print "--- if args numeric < (true) ---"
-if args[3] < 100
-print "OK: args[3] < 100"
+if args[4] < 100
+print "OK: args[4] < 100"
 end
 
 print "--- if args numeric > (false) ---"
-if args[3] > 100
-print "FAIL: args[3] should not be > 100"
+if args[4] > 100
+print "FAIL: args[4] should not be > 100"
 end
 print "OK: skipped false block"
