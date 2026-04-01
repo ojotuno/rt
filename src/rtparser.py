@@ -146,7 +146,7 @@ def parse_target_dir(tokens, lineNum):
 
 def invoke_rt(tokens, lineNum):
     if len(tokens) < 2:
-        msg.syntax_error("Invalid call to rt. Command: rt [-url] <recipe/rt-file> [args...]", lineNum)
+        msg.syntax_error("Invalid call to rt. Command: rt [-url, -show] <recipe/rt-file> [args...]", lineNum)
         return
 
     rt_script = os.path.join(os.path.dirname(__file__), "rt.py")

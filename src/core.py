@@ -12,7 +12,6 @@ import colors
 class RT_MODE:
    Default = 0
    Install = 1
-   Call = 2
 
 def run_rt(rtfile, url=False):
   # add all arguments
@@ -43,13 +42,11 @@ def download_and_run_file(url):
     os.chdir(currentDir)
     utils.removeTmpDir(tmpDir)
 
-def process_rtfile(rtFile, mode:RT_MODE):
+def process_rtfile(rtFile : str, mode : RT_MODE) -> None:
     if mode == RT_MODE.Default:
-        msg.info("Processing recipe..")
-    elif mode == RT_MODE.Install:
-        msg.info("Processing installation recipe..")
-    elif mode== RT_MODE.Call:
-        msg.info("Calling to " + rtFile)
+        msg.info(f"Processing recipe {rtFile}")
+    else:
+        msg.info(f"Processing installation recipe {rtFile}")
     rtparser.parse(rtFile)
 
 def run_installer(src, dest, ext):

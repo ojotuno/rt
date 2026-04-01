@@ -10,30 +10,53 @@ import colors
 
 kw = g.Keywords()
 
+class quote_state:
+    UNQUOTED = 0
+    SINGLE_QUOTED = 1
+    DOUBLE_QUOTED = 2
+
 def tokenize(line, lineNum, separator=' '):
     tokens = []
     token = ""
-    quotes = False
+    quotes = quote_state.UNQUOTED    
+
     for char in line:
+        if char in ['\n', '\t']:
+            break
         if char == kw.COMMENT:
+            if len(token) > 0:
+                tokens.append(utils.resolve(token, lineNum))
             return tokens
         elif char == separator:
-            if not quotes and len(token) > 0:
+            if quotes == quote_state.UNQUOTED and len(token) > 0: # save a token
                 tokens.append(utils.resolve(token, lineNum))
                 token = ""
-            elif quotes:   
-                token += char # add space as part of the token because is in a quoted string
-        else:
-            if char == '"':
-                if quotes:
-                    quotes = False
-                else:
-                    quotes = True
-            if char not in ['\n', '\t']:
+            elif quotes == quote_state.DOUBLE_QUOTED and len(token) > 0: # add token without resolving 
+                tokens.append(token)
+                token = ""
+                quotes = quote_state.UNQUOTED #reset state
+            elif quotes == quote_state.SINGLE_QUOTED: # add char as part of the token
                 token += char
+            else:
+                pass # two or more separators in a row, we skip them
+        else: #add char to token
+            if char == '"':
+                if quotes == quote_state.UNQUOTED:
+                    quotes = quote_state.SINGLE_QUOTED
+                elif quotes == quote_state.SINGLE_QUOTED:
+                    quotes = quote_state.DOUBLE_QUOTED
+                elif quotes == quote_state.DOUBLE_QUOTED:
+                    msg.error("Syntax error: repeated double quotes before separator", lineNum)
+            
+            token += char # add " as part of the token because is in a single quoted string
     
-    if len(token) > 0: # process last token
+    if quotes == quote_state.UNQUOTED and len(token) > 0: # save a token
         tokens.append(utils.resolve(token, lineNum))
+        token = ""
+    elif quotes == quote_state.DOUBLE_QUOTED and len(token) > 0: # add token without resolving 
+        tokens.append(token)
+        token = ""
+          
 
     return tokens
 
