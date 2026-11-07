@@ -1,6 +1,6 @@
-#/bin/sh 
-
+#!/bin/sh
+# Generate the build number shown by `rt --help`.
+cd "$(dirname "$0")"
 date=$(date '+%d%m%Y-%H%M%S')
-#buildnum=`git log --pretty=format:'%h' -n 1`
-echo "num = \""$date"\"" > ./src/buildnum.py
-echo "Build number generated: "$date
+echo "num = \"$date\"" > ./src/rt/buildnum.py
+echo "Build number generated: $date"

@@ -1,0 +1,42 @@
+#!/bin/sh
+# Build a new RT release:
+#   releases/rt.tar.gz  -> extract and run ./install.sh
+#   releases/rt.rt      -> same + `install` recipe (used by `rt -update`)
+set -eu
+
+cd "$(dirname "$0")"
+REPO="$(pwd)"
+RELEASES="$REPO/releases"
+
+step() { printf '\n==> %s\n' "$*"; }
+run() { echo "+ $*"; "$@"; }
+
+STAGE="$(mktemp -d)"
+trap 'echo "+ rm -rf $STAGE"; rm -rf "$STAGE"' EXIT
+
+step "Generating build number"
+run sh "$REPO/build.sh"
+
+step "Preparing files in $STAGE"
+run mkdir -p "$STAGE/src" "$STAGE/bin"
+run cp -Rp "$REPO/src/rt" "$STAGE/src/"
+run cp -p "$REPO/bin/rt" "$STAGE/bin/rt"
+run cp -p "$REPO/install.sh" "$STAGE/install.sh"
+run cp -p "$REPO/recipes/install" "$STAGE/install"
+echo "+ removing __pycache__ directories"
+find "$STAGE" -name __pycache__ -type d -prune -print -exec rm -rf {} +
+
+run mkdir -p "$RELEASES"
+
+step "Creating $RELEASES/rt.tar.gz"
+run tar -czvf "$RELEASES/rt.tar.gz.part" -C "$STAGE" src bin install.sh
+run mv "$RELEASES/rt.tar.gz.part" "$RELEASES/rt.tar.gz"
+
+step "Creating $RELEASES/rt.rt"
+run tar -czvf "$RELEASES/rt.rt.part" -C "$STAGE" src bin install.sh install
+run mv "$RELEASES/rt.rt.part" "$RELEASES/rt.rt"
+
+step "Release ready"
+echo "Build: $(sed 's/^num = "\(.*\)"$/\1/' "$REPO/src/rt/buildnum.py")"
+ls -l "$RELEASES/rt.tar.gz" "$RELEASES/rt.rt"
+echo "Upload releases/rt.rt (and rt.tar.gz) to the GitHub release 'lastest'."

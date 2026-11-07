@@ -1,0 +1,9 @@
+# Run from the repository root: bin/rt tests/recipes/run_if_tests
+root_dir ./tests/recipes
+
+rt if-eq
+rt if-neq
+rt if-numeric
+rt if-args foo bar 42
+rt if-env
+rt if-nested

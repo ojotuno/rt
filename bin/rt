@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""RT launcher. install.sh replaces @LIBDIR@ with the install location."""
+import os
+import sys
+
+LIBDIR = "@LIBDIR@"
+if not os.path.isdir(os.path.join(LIBDIR, "rt")):
+    # Running from a source checkout: <repo>/bin/rt -> <repo>/src
+    LIBDIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir, "src")
+sys.path.insert(0, os.path.abspath(LIBDIR))
+
+from rt.cli import main  # noqa: E402
+
+sys.exit(main())
